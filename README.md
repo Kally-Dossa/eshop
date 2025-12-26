@@ -29,7 +29,7 @@ The system is designed around the following core entities:
 * **Checkout:** Complete purchase of items currently in the shopping cart.
 
 ## Tech Stack
-* **Java:** 19
+* **Java:** 17
 * **Framework:** Spring Boot 4.0.1
 * **Build Tool:** Maven
 * **Version Control:** Git & GitHub
