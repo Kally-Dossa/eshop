@@ -37,7 +37,7 @@ The system is designed around the following core entities:
 ## Getting Started
 
 ### Prerequisites
-* JDK 19 or higher
+* JDK 17
 * Maven (optional, project includes Maven Wrapper)
 
 ### Installation & Execution
