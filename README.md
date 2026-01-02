@@ -8,15 +8,15 @@ This project implements a web-based marketplace based on the following requireme
 * **Citizens:** Can search for products, manage their shopping cart, and complete purchases.
 
 ## User Roles
-* **Store (Μαγαζί):** Business entity with a product catalog.
-* **Citizen (Πολίτης):** Individual user/customer.
+* **Store:** Business entity with a product catalog.
+* **Citizen:** Individual user/customer.
 
 ## System Entities & Attributes
 The system is designed around the following core entities:
-* **Citizen (Πολίτης):** Tax ID (ΑΦΜ), First Name, Last Name, Email, Password, Shopping Cart.
-* **Product (Προϊόν):** Type, Brand, Description, Price, Stock Quantity, Associated Store.
-* **Store (Μαγαζί):** Tax ID (ΑΦΜ), Brand Name, Owner Name, Password, Product List.
-* **Cart (Καλάθι):** Citizen reference, List of Products, Total Price.
+* **Citizen:** Tax ID (ΑΦΜ), First Name, Last Name, Email, Password, Shopping Cart.
+* **Product:** Type, Brand, Description, Price, Stock Quantity, Associated Store.
+* **Store:** Tax ID (ΑΦΜ), Brand Name, Owner Name, Password, Product List.
+* **Cart:** Citizen reference, List of Products, Total Price.
 
 ## Key Functionalities
 * **Authentication:** Secure Login and Registration for both Citizens and Stores.
