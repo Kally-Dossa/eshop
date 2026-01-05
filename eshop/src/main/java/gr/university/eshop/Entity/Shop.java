@@ -1,69 +1,35 @@
 package gr.university.eshop.Entity;
 
 import jakarta.persistence.*;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Shop {
-
     @Id
-    private String afm; // afm shop  Primary Key
-
-    private String companyName;
+    private String afm; // ΑΦΜ ως ID
+    private String name; // Επωνυμία
     private String owner;
     private String password;
 
-    // shop has many items
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
-    private List<Product> products;
+    @OneToMany(mappedBy="shop", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
 
     public Shop() {}
 
-    public Shop(String afm, String companyName, String owner, String password) {
+    public Shop(String afm, String name, String owner, String password) {
         this.afm = afm;
-        this.companyName = companyName;
+        this.name = name;
         this.owner = owner;
         this.password = password;
     }
 
-    // Getters και Setters
-    public String getAfm() {
-        return afm;
+    public void addProduct(Product p) {
+        products.add(p);
+        p.setShop(this);
     }
 
-    public void setAfm(String afm) {
-        this.afm = afm;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+    // Getters Setters
+    public String getAfm() { return afm; }
+    public String getName() { return name; }
+    public List<Product> getProducts() { return products; }
 }

@@ -13,7 +13,7 @@ public class Product {
     private String brand;
     private String description;
     private Double price;
-    private Integer quantity; //  (Stock)
+    private Integer stock; //  (Stock)
 
     // many items belong to one shop
     @ManyToOne
@@ -61,12 +61,12 @@ public class Product {
         this.price = price;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getStock() {
+        return stock;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public Shop getShop() {
