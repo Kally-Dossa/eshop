@@ -1,4 +1,7 @@
-package gr.university.eshop.Entity;
+package gr.university.eshop.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 import jakarta.persistence.*;
 
@@ -14,9 +17,11 @@ public class Citizen {
     private String password;
 
     @OneToOne(mappedBy = "citizen", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Cart cart;
 
     public Citizen() {}
+    
 
     public Citizen(String afm, String name, String surname, String email, String password) {
         this.afm = afm;
