@@ -32,7 +32,7 @@ public class CartService {
 
         }
     }
-
+ 
     //updateItem should only update quantity
     public void updateItem(CartItem cartItem) {
         CartItem existingCartItem = cartItemRepo.findById(cartItem.getId())
