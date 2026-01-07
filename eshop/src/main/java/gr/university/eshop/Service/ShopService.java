@@ -58,4 +58,13 @@ public class ShopService {
         return shopRepository.findById(afm)
                 .orElseThrow(() -> new Exception("Shop not found"));
     }
+
+    public void deleteProduct(Long productId) {
+        // Έλεγχος: Αν το προϊόν υπάρχει, το διαγράφουμε
+        if (productRepository.existsById(productId)) {
+            productRepository.deleteById(productId);
+        } else {
+            throw new RuntimeException("Το προϊόν δεν βρέθηκε!");
+        }
+    }
 }

@@ -36,4 +36,15 @@ public class ShopController {
             return "Σφάλμα: " + e.getMessage();
         }
     }
+
+    // URL: DELETE /delete/product/{id}
+    @DeleteMapping("/delete/product/{id}")
+    public String deleteProductAPI(@PathVariable Long id) {
+        try {
+            shopService.deleteProduct(id);
+            return "Το προϊόν (ID: " + id + ") διαγράφηκε επιτυχώς.";
+        } catch (Exception e) {
+            return "Σφάλμα κατά τη διαγραφή: " + e.getMessage();
+        }
+    }
 }

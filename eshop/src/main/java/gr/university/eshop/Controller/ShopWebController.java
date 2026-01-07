@@ -56,4 +56,15 @@ public class ShopWebController {
             return "error";
         }
     }
+
+    @PostMapping("/shop/products/delete")
+    public String deleteProductWeb(@RequestParam("productId") Long productId) {
+        try {
+            shopService.deleteProduct(productId);
+            return "redirect:/shop/dashboard"; // Επιστροφή στο Dashboard για να δούμε τη λίστα ενημερωμένη
+        } catch (Exception e) {
+            // Εδώ θα μπορούσες να γυρίσεις σε σελίδα λάθους ή να προσθέσεις μήνυμα στο URL
+            return "redirect:/shop/dashboard?error=deleteFailed";
+        }
+    }
 }
