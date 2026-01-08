@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Shop Login</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { display: flex; gap: 50px; }
+        .box { flex: 1; border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
+        input { display: block; width: 90%; margin-bottom: 10px; padding: 8px; }
+        button { padding: 10px 20px; cursor: pointer; background-color: #007bff; color: white; border: none; }
+        button:hover { background-color: #0056b3; }
+        h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<h1> Welcome to our E-Shop</h1>
+
+<div class="container">
+    <div class="box">
+        <h2> New Customer Registration</h2>
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email Address">
+        <input type="password" id="regPass" placeholder="Password">
+        <input type="text" id="regAfm" placeholder="Tax ID (AFM)">
+        <button onclick="doRegister()">Register</button>
+    </div>
+
+    <div class="box">
+        <h2> Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email Address">
+        <input type="password" id="loginPass" placeholder="Password">
+        <button onclick="doLogin()">Login</button>
+    </div>
+</div>
+
+<script>
+    // --- REGISTRATION FUNCTION ---
+    async function doRegister() {
+        // 1. Collect data from the input fields
+        const data = {
+            name: document.getElementById("regName").value,
+            email: document.getElementById("regEmail").value,
+            password: document.getElementById("regPass").value,
+            afm: document.getElementById("regAfm").value
+        };
+
+        // 2. Send data to Backend (Controller)
+        try {
+            const response = await fetch('/api/citizen/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data) // Convert JS object to JSON string
+            });
+
+            const message = await response.text(); // Read server response
+            alert("Server Message: " + message);
+
+        } catch (error) {
+            alert("Connection Error: " + error);
+        }
+    }
+
+    // --- LOGIN FUNCTION ---
+    async function doLogin() {
+        // 1. Collect login credentials
+        const data = {
+            email: document.getElementById("loginEmail").value,
+            password: document.getElementById("loginPass").value
+        };
+
+        // 2. Send data to Backend
+        try {
+            const response = await fetch('/api/citizen/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const message = await response.text();
+
+            // Check if the response contains "Welcome" (Success)
+            if (message.includes("Welcome")) {
+                alert(" Success: " + message);
+                // Future step: Redirect to products page
+                // window.location.href = "/products.html";
+            } else {
+                alert(" Error: " + message);
+            }
+
+        } catch (error) {
+            alert("Connection Error: " + error);
+        }
+    }
+</script>
+
+</body>
+</html>
