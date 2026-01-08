@@ -36,7 +36,7 @@
 </div>
 
 <script>
-    // --- REGISTRATION FUNCTION ---
+    // --------- REGISTRATION FUNCTION ------------
     async function doRegister() {
         // 1. Collect data from the input fields
         const data = {
@@ -48,7 +48,7 @@
 
         // 2. Send data to Backend (Controller)
         try {
-            const response = await fetch('/api/citizen/register', {
+            const response = await fetch('/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data) // Convert JS object to JSON string
@@ -62,7 +62,7 @@
         }
     }
 
-    // --- LOGIN FUNCTION ---
+    // ------------ LOGIN FUNCTION -----------
     async function doLogin() {
         // 1. Collect login credentials
         const data = {
@@ -72,7 +72,7 @@
 
         // 2. Send data to Backend
         try {
-            const response = await fetch('/api/citizen/login', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

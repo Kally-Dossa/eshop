@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // Means this class responds with data (not HTML yet)
-@RequestMapping("/api/citizen") // All URLs will start with /api/citizen
 public class CitizenController {
 
     @Autowired
     private CitizenService citizenService;
 
     // --- REGISTRATION ---
-    // URL: http://localhost:8080/api/citizen/register
+    // URL: http://localhost:8080/register
     @PostMapping("/register")
     public String register(@RequestBody CitizenRegisterDto dto) {
         try {
@@ -28,7 +27,7 @@ public class CitizenController {
     }
 
     // --- LOGIN ---
-    // URL: http://localhost:8080/api/citizen/login
+    // URL: http://localhost:8080/login
     @PostMapping("/login")
     public String login(@RequestBody LoginDto loginDto, HttpSession session) {
         try {
