@@ -1,4 +1,4 @@
-package gr.university.eshop.Entity;
+package gr.university.eshop.model;
 
 import jakarta.persistence.*;
 
@@ -17,6 +17,7 @@ public class Citizen {
     private Cart cart;
 
     public Citizen() {}
+    
 
     public Citizen(String afm, String name, String surname, String email, String password) {
         this.afm = afm;
@@ -65,9 +66,6 @@ public class Citizen {
         this.password = password;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
     public void setCart(Cart cart) {
         this.cart = cart;
     }

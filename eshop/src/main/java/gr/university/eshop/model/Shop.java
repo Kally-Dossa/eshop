@@ -1,4 +1,4 @@
-package gr.university.eshop.Entity;
+package gr.university.eshop.model;
 
 import jakarta.persistence.*;
 import java.util.*;

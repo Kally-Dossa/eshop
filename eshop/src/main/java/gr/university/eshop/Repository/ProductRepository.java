@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package gr.university.eshop.Repository;
 
 import gr.university.eshop.Entity.Product;
@@ -10,3 +11,13 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByShopAfm(String afm);
 }
+=======
+package gr.university.eshop.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import gr.university.eshop.model.Product;
+
+public interface ProductRepository extends JpaRepository<Product, Long>{
+
+}
+>>>>>>> menelaos/cart-checkout

@@ -1,4 +1,4 @@
-package gr.university.eshop.Entity;
+package gr.university.eshop.model;
 
 import gr.university.eshop.DTO.ProductDto;
 import jakarta.persistence.*;
