@@ -1,11 +1,11 @@
-package gr.university.eshop.Controller;
+package gr.university.eshop.controller;
 
-import gr.university.eshop.DTO.LoginDto;
-import gr.university.eshop.DTO.ProductDto;
-import gr.university.eshop.DTO.ShopRegisterDto;
-import gr.university.eshop.Entity.Product;
-import gr.university.eshop.Entity.Shop;
-import gr.university.eshop.Service.ShopService;
+import gr.university.eshop.dto.LoginDto;
+import gr.university.eshop.dto.ProductDto;
+import gr.university.eshop.dto.ShopRegisterDto;
+import gr.university.eshop.model.Product;
+import gr.university.eshop.model.Shop;
+import gr.university.eshop.service.ShopService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

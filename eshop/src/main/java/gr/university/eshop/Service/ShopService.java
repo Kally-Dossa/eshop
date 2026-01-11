@@ -1,11 +1,11 @@
-package gr.university.eshop.Service;
+package gr.university.eshop.service;
 
-import gr.university.eshop.DTO.ProductDto;
-import gr.university.eshop.DTO.ShopRegisterDto;
-import gr.university.eshop.Entity.Product;
-import gr.university.eshop.Entity.Shop;
-import gr.university.eshop.Repository.ProductRepository;
-import gr.university.eshop.Repository.ShopRepository;
+import gr.university.eshop.model.Product;
+import gr.university.eshop.model.Shop;
+import gr.university.eshop.repository.ProductRepository;
+import gr.university.eshop.repository.ShopRepository;
+import gr.university.eshop.dto.ProductDto;
+import gr.university.eshop.dto.ShopRegisterDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class ShopService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> getProductsByShopAfm(String afm) {
+    public List<Product> getProductsByShopAfm(Long afm) {
         return productRepository.findByShopAfm(afm);
     }
 }

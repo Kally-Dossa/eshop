@@ -7,6 +7,6 @@ import gr.university.eshop.model.Cart;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    Optional<Cart> findByCitizen_Afm(String afm);
+    Optional<Cart> findByCitizen_Afm(Long afm);
     
 }

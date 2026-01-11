@@ -58,7 +58,7 @@ public class CartService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not Found!"));
         
         //check if we have stock to add to cart
-        if(product.getQuantity()<quantity) {
+        if(product.getStock()<quantity) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough Stock of product");
         }
         
@@ -89,7 +89,7 @@ public class CartService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "CartItem not Found"));
         
         
-        if(existingCartItem.getProduct().getQuantity()< quantity) {
+        if(existingCartItem.getProduct().getStock()< quantity) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Not enough stock of product");
         }
         existingCartItem.setQuantity(quantity);

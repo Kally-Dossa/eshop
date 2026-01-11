@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Citizen {
 
     @Id
-    private String afm; // afm Primary Key
+    private Long afm; // afm Primary Key
 
     private String name;
     private String surname;
@@ -19,7 +19,7 @@ public class Citizen {
     public Citizen() {}
     
 
-    public Citizen(String afm, String name, String surname, String email, String password) {
+    public Citizen(Long afm, String name, String surname, String email, String password) {
         this.afm = afm;
         this.name = name;
         this.surname = surname;
@@ -28,11 +28,11 @@ public class Citizen {
     }
 
     // Getters και Setters
-    public String getAfm() {
+    public Long getAfm() {
         return afm;
     }
 
-    public void setAfm(String afm) {
+    public void setAfm(Long afm) {
         this.afm = afm;
     }
 

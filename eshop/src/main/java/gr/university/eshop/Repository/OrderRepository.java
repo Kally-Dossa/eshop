@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface OrderRepository extends JpaRepository<Order, Long>{
-    List<Order> findByCitizen_AfmOrderByOrderDateDesc(String afm);
+    List<Order> findByCitizen_AfmOrderByOrderDateDesc(Long afm);
 }

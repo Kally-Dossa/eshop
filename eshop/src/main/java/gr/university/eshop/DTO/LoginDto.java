@@ -1,4 +1,4 @@
-package gr.university.eshop.DTO;
+package gr.university.eshop.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -67,12 +67,12 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
             
             //check for quantity
-            if(p.getQuantity() < item.getQuantity()) {
+            if(p.getStock() < item.getQuantity()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough stock for product with ID "+p.getId());
             }
 
             //decrease product stock
-            p.setQuantity(p.getQuantity()-item.getQuantity());
+            p.setStock(p.getStock()-item.getQuantity());
             productRepo.save(p);
 
             OrderItem orderItem = new OrderItem();

@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-package gr.university.eshop.Repository;
+package gr.university.eshop.repository;
 
-import gr.university.eshop.Entity.Citizen;
+import gr.university.eshop.model.Citizen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +13,3 @@ public interface CitizenRepository extends JpaRepository<Citizen, Long> {
     // Finds a citizen by searching based on their email.
     Optional<Citizen> findByEmail(String email);
 }
-=======
-package gr.university.eshop.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import gr.university.eshop.model.Citizen;
-
-public interface CitizenRepository extends JpaRepository<Citizen, String>{
-
-}
->>>>>>> menelaos/cart-checkout

@@ -1,6 +1,6 @@
-package gr.university.eshop.Repository;
+package gr.university.eshop.repository;
 
-import gr.university.eshop.Entity.Shop;
+import gr.university.eshop.model.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

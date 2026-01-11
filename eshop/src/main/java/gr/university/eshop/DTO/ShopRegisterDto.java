@@ -1,4 +1,4 @@
-package gr.university.eshop.DTO;
+package gr.university.eshop.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 public class ShopRegisterDto {
     @NotBlank(message = "AFM is mandatory")
     @Pattern(regexp = "\\d{9}", message = "AFM must be 9 digits")
-    private String afm;
+    private Long afm;
 
     @NotBlank(message = "Name is mandatory")
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
@@ -25,7 +25,7 @@ public class ShopRegisterDto {
     public ShopRegisterDto() {
     }
 
-    public ShopRegisterDto(String afm, String name,String email, String password) {
+    public ShopRegisterDto(Long afm, String name,String email, String password) {
 
         this.afm = afm;
         this.name = name;
@@ -42,6 +42,6 @@ public class ShopRegisterDto {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getAfm() { return afm; }
-    public void setAfm(String afm) { this.afm = afm; }
+    public Long getAfm() { return afm; }
+    public void setAfm(Long afm) { this.afm = afm; }
 }

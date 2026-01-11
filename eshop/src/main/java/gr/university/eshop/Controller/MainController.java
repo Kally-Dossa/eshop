@@ -1,7 +1,7 @@
-package gr.university.eshop.Controller;
+package gr.university.eshop.controller;
 
-import gr.university.eshop.DTO.LoginDto;
-import gr.university.eshop.DTO.ShopRegisterDto;
+import gr.university.eshop.dto.LoginDto;
+import gr.university.eshop.dto.ShopRegisterDto;
 // import gr.university.eshop.DTO.UserRegisterDto; // Υποθέτω ότι έχεις αυτό το DTO
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
