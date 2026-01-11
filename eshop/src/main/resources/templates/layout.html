@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Shop Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; display: flex; flex-direction: column; min-height: 100vh; }
+        main { flex: 1; }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .footer { background-color: #e9ecef; padding: 20px 0; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-primary" th:href="@{/}">🛍️ Our E-Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item" th:if="${session.loggedInShop != null}">
+                    <a class="nav-link" th:href="@{/shop/dashboard}">📊 Dashboard</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loggedInShop != null or session.loggedInUser != null}">
+                    <a class="btn btn-outline-danger btn-sm ms-2" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <th:block th:replace="${content}" />
+</main>
+
+<footer class="footer text-center text-muted">
+    <div class="container">
+        <p class="mb-0">© 2026 Our E-Shop. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
