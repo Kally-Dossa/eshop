@@ -9,15 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user") // <--- ΠΡΟΣΘΗΚΗ: Όλα τα URLs θα ξεκινάνε με /api/user
+@RequestMapping("/api/user")
 public class CitizenController {
 
     @Autowired
     private CitizenService citizenService;
 
     // --- REGISTRATION ---
-    // Νέο URL: POST /api/user/register
-    @PostMapping("/register") // Απλοποίηση του URL (το /api/user μπαίνει αυτόματα)
+    @PostMapping("/register")
     public String register(@RequestBody CitizenRegisterDto dto) {
         try {
             citizenService.registerCitizen(dto);
@@ -28,7 +27,6 @@ public class CitizenController {
     }
 
     // --- LOGIN ---
-    // Νέο URL: POST /api/user/login
     @PostMapping("/login")
     public String login(@RequestBody LoginDto loginDto, HttpSession session) {
         try {

@@ -1,5 +1,6 @@
 package gr.university.eshop.controller;
 
+import gr.university.eshop.dto.CitizenRegisterDto;
 import gr.university.eshop.dto.LoginDto;
 import gr.university.eshop.dto.ShopRegisterDto;
 // import gr.university.eshop.DTO.UserRegisterDto; // Υποθέτω ότι έχεις αυτό το DTO
@@ -23,8 +24,7 @@ public class MainController { // Μπορείς να το βάλεις και σ
 
         // 2. User DTOs (Πρέπει να φτιάξεις τα αντίστοιχα DTOs αν δεν τα έχεις)
         if (!model.containsAttribute("userLoginDto")) model.addAttribute("userLoginDto", new LoginDto());
-
-        if (!model.containsAttribute("userRegisterDto")) model.addAttribute("userRegisterDto", new ShopRegisterDto());
+        if (!model.containsAttribute("userRegisterDto")) model.addAttribute("userRegisterDto", new CitizenRegisterDto());
 
         return "index";
     }
