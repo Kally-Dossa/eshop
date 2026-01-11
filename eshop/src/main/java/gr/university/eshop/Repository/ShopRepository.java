@@ -1,9 +1,13 @@
 package gr.university.eshop.Repository;
 
+import gr.university.eshop.Entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import gr.university.eshop.Entity.*;
+import java.util.Optional;
 
+@Repository
+public interface ShopRepository extends JpaRepository<Shop, Long> {
 
-public interface ShopRepository extends JpaRepository<Shop, String> { // ID is String (AFM)
+    Optional<Shop> findByEmail(String email);
 }

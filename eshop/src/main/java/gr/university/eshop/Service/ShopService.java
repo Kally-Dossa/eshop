@@ -1,70 +1,72 @@
 package gr.university.eshop.Service;
 
-import org.springframework.stereotype.Service;
+import gr.university.eshop.DTO.ProductDto;
+import gr.university.eshop.DTO.ShopRegisterDto;
+import gr.university.eshop.Entity.Product;
+import gr.university.eshop.Entity.Shop;
+import gr.university.eshop.Repository.ProductRepository;
+import gr.university.eshop.Repository.ShopRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import gr.university.eshop.Entity.*;
-import gr.university.eshop.Repository.*;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-@Service // [cite: 92]
+@Service
 public class ShopService {
 
-    @Autowired // [cite: 94]
+    @Autowired
     private ShopRepository shopRepository;
 
     @Autowired
     private ProductRepository productRepository;
 
-    // --- FUNCTION 1: Add Product (for a shop) ---
-    public void addProductToShop(String shopAfm, Product product) throws Exception {
-        // 1. We find the shop based on AFM (like in findById)
-        Optional<Shop> shopOpt = shopRepository.findById(shopAfm);
+    // REGISTER SHOP (Αλλαγή: Επιστρέφει Shop αντί για void)
+    @Transactional
+    public Shop registerShop(ShopRegisterDto dto) throws Exception {
+        // Check if email exists
+        if (shopRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new Exception("This email already exists for a shop!");
+        }
 
-        if (shopOpt.isPresent()) {
-            Shop shop = shopOpt.get();
+        Shop shop = new Shop();
+        shop.setName(dto.getName());
+        shop.setEmail(dto.getEmail());
+        shop.setPassword(dto.getPassword());
+        shop.setAfm(dto.getAfm());
 
-            // 2. We connect the product with the shop.
-            // We use the helper method addProduct that already exists in Shop.java
-            shop.addProduct(product);
+        return shopRepository.save(shop); // Επιστροφή του αποθηκευμένου Shop
+    }
 
-            // 3. We save the shop.
-            // the product will be automatically saved in the database
-            shopRepository.save(shop);
+    // ... (Οι υπόλοιπες μέθοδοι login, addProduct κλπ παραμένουν ίδιες) ...
+    public Shop login(String email, String password) throws Exception {
+        Optional<Shop> existingShop = shopRepository.findByEmail(email);
+        if (existingShop.isPresent() && existingShop.get().getPassword().equals(password)) {
+            return existingShop.get();
         } else {
-            throw new Exception("Shop with AFM " + shopAfm + " not found.");
+            throw new Exception("Wrong email or password!");
         }
     }
 
-    // --- FUNCTION 2: Update Product Stock ---
+    public void addProductToShop(Shop shop, ProductDto productDto) throws Exception {
+        if (shop == null) throw new Exception("Shop not found");
+        Product product = new Product(productDto);
+        product.setShop(shop);
+        productRepository.save(product);
+    }
+
     public void updateProductStock(Long productId, Integer newStock) throws Exception {
-        // 1. We find the product by its ID
-        Optional<Product> productOpt = productRepository.findById(productId);
-
-        if (productOpt.isPresent()) {
-            Product product = productOpt.get();
-
-            // 2. We update the stock
-            product.setStock(newStock);
-
-            // 3. We save the changes (update)
-            productRepository.save(product);
-        } else {
-            throw new Exception("Product with ID " + productId + " not found.");
-        }
+        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
+        product.setStock(newStock);
+        productRepository.save(product);
     }
 
-    public Shop findShopByAfm(String afm) throws Exception {
-        return shopRepository.findById(afm)
-                .orElseThrow(() -> new Exception("Shop not found"));
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 
-    public void deleteProduct(Long productId) {
-        // Έλεγχος: Αν το προϊόν υπάρχει, το διαγράφουμε
-        if (productRepository.existsById(productId)) {
-            productRepository.deleteById(productId);
-        } else {
-            throw new RuntimeException("Το προϊόν δεν βρέθηκε!");
-        }
+    public List<Product> getProductsByShopAfm(String afm) {
+        return productRepository.findByShopAfm(afm);
     }
 }

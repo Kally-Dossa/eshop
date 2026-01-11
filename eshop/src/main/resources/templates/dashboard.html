@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::section})}">
+<body>
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-secondary">📊 Shop Dashboard: <span class="text-primary" th:text="${shopName}"></span></h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                + New Product
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr><th>Type</th><th>Brand</th><th>Description</th><th>Price (€)</th><th>Stock</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.type}"></td>
+                        <td th:text="${product.brand}"></td>
+                        <td th:text="${product.description}"></td>
+                        <td th:text="${product.price}"></td>
+                        <td>
+                            <form th:action="@{/shop/products/update-stock}" method="post" class="d-flex align-items-center">
+                                <input type="hidden" name="productId" th:value="${product.id}">
+                                <input type="number" name="newStock" th:value="${product.stock}" class="form-control form-control-sm text-center" style="width: 70px;">
+                                <button type="submit" class="btn btn-sm btn-outline-success ms-2">OK</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{'/shop/products/delete/' + ${product.id}}" method="post">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div th:if="${products.empty}" class="alert alert-info text-center mt-3 mb-0">No products yet.</div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white"><h5 class="modal-title">Add New Product</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><form th:action="@{/shop/products/save}" th:object="${newProduct}" method="post"><div class="row"><div class="col-md-6 mb-3"><label class="form-label">Type</label><input type="text" th:field="*{type}" class="form-control" required></div><div class="col-md-6 mb-3"><label class="form-label">Brand</label><input type="text" th:field="*{brand}" class="form-control" required></div></div><div class="mb-3"><label class="form-label">Description</label><textarea th:field="*{description}" class="form-control" rows="2"></textarea></div><div class="row"><div class="col-md-6 mb-3"><label class="form-label">Price (€)</label><input type="number" step="0.01" th:field="*{price}" class="form-control" required></div><div class="col-md-6 mb-3"><label class="form-label">Stock</label><input type="number" th:field="*{stock}" class="form-control" required></div></div><div class="modal-footer border-0"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-primary">Save Product</button></div></form></div></div></div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>
