@@ -1,8 +1,5 @@
 package gr.university.eshop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +14,6 @@ public class Citizen {
     private String password;
 
     @OneToOne(mappedBy = "citizen", cascade = CascadeType.ALL)
-    @JsonBackReference
     private Cart cart;
 
     public Citizen() {}
@@ -70,9 +66,6 @@ public class Citizen {
         this.password = password;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
     public void setCart(Cart cart) {
         this.cart = cart;
     }

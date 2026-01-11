@@ -3,7 +3,6 @@ package gr.university.eshop.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 
@@ -17,12 +16,10 @@ public class Cart {
     // each citizen has one cart
     @OneToOne
     @JoinColumn(name = "citizen_afm")
-    @JsonManagedReference
     private Citizen citizen;
 
     //in order to save quantity we need to create CartItem
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<CartItem> items = new ArrayList<>();
 
     public Cart() {
@@ -36,10 +33,6 @@ public class Cart {
 
     public Citizen getCitizen() {
         return citizen;
-    }
-
-    public List<CartItem> getItems() {
-        return items;
     }
 
     public void setCitizen(Citizen citizen) {

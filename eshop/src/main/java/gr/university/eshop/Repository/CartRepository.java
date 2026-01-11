@@ -1,10 +1,12 @@
 package gr.university.eshop.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import gr.university.eshop.model.Cart;
-import gr.university.eshop.model.Citizen;
+
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    Cart findByCitizen(Citizen citizen);
+    Optional<Cart> findByCitizen_Afm(String afm);
+    
 }
