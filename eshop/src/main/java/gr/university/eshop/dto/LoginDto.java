@@ -1,4 +1,4 @@
-package gr.university.eshop.DTO;
+package gr.university.eshop.dto;
 
 public class LoginDto {
 

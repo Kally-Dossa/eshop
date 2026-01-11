@@ -1,9 +1,9 @@
-package gr.university.eshop.Controller;
+package gr.university.eshop.controller;
 
-import gr.university.eshop.Entity.Citizen;
-import gr.university.eshop.Service.CitizenService;
-import gr.university.eshop.DTO.CitizenRegisterDto;
-import gr.university.eshop.DTO.LoginDto;
+import gr.university.eshop.entity.Citizen;
+import gr.university.eshop.service.CitizenService;
+import gr.university.eshop.dto.CitizenRegisterDto;
+import gr.university.eshop.dto.LoginDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

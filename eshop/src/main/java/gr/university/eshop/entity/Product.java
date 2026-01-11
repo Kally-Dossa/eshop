@@ -1,5 +1,5 @@
-package gr.university.eshop.Entity;
-
+package gr.university.eshop.entity;
+import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +19,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "shop_afm")
     private Shop shop;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Cart> carts;
 
     public Product() {}
 

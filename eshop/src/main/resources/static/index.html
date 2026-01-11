@@ -2,92 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>E-Shop Login</title>
+    <title>E-Shop Portal</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .container { display: flex; gap: 50px; }
-        .box { flex: 1; border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
-        input { display: block; width: 90%; margin-bottom: 10px; padding: 8px; }
-        button { padding: 10px 20px; cursor: pointer; background-color: #007bff; color: white; border: none; }
-        button:hover { background-color: #0056b3; }
-        h2 { margin-top: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }
+        h1 { text-align: center; color: #333; }
+
+        .main-container { display: flex; gap: 20px; flex-wrap: wrap; }
+
+        /* Column Styles (Citizen vs Shop) */
+        .column { flex: 1; min-width: 300px; padding: 20px; border-radius: 10px; color: white; }
+
+        .citizen-col { background-color: #007bff; } /* Blue for citizens */
+        .shop-col { background-color: #28a745; }    /* Green for shops */
+
+        .box { background-color: rgba(255, 255, 255, 0.95); color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        h3 { text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        input { display: block; width: 95%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+
+        button { width: 100%; padding: 10px; cursor: pointer; font-weight: bold; border: none; border-radius: 4px; transition: background 0.3s; }
+
+        /* Citizen Buttons */
+        .btn-citizen { background-color: #0056b3; color: white; }
+        .btn-citizen:hover { background-color: #003d82; }
+
+        /* Shop Buttons */
+        .btn-shop { background-color: #1e7e34; color: white; }
+        .btn-shop:hover { background-color: #155724; }
+
     </style>
 </head>
 <body>
 
-<h1> Welcome to our E-Shop</h1>
+<h1>E-Shop Management System</h1>
 
-<div class="container">
-    <div class="box">
-        <h2> New Customer Registration</h2>
-        <input type="text" id="regName" placeholder="Full Name">
-        <input type="email" id="regEmail" placeholder="Email Address">
-        <input type="password" id="regPass" placeholder="Password">
-        <input type="text" id="regAfm" placeholder="Tax ID (AFM)">
-        <button onclick="doRegister()">Register</button>
+<div class="main-container">
+
+    <div class="column citizen-col">
+        <h3> Citizen Area</h3>
+
+        <div class="box">
+            <h2>New Customer Registration</h2>
+            <input type="text" id="citName" placeholder="Full Name">
+            <input type="email" id="citEmail" placeholder="Email Address">
+            <input type="password" id="citPass" placeholder="Password">
+            <input type="text" id="citAfm" placeholder="Tax ID (AFM)">
+            <button class="btn-citizen" onclick="registerCitizen()">Register Citizen</button>
+        </div>
+
+        <div class="box">
+            <h2>Customer Login</h2>
+            <input type="email" id="citLoginEmail" placeholder="Email Address">
+            <input type="password" id="citLoginPass" placeholder="Password">
+            <button class="btn-citizen" onclick="loginCitizen()">Login</button>
+        </div>
     </div>
 
-    <div class="box">
-        <h2> Login</h2>
-        <input type="email" id="loginEmail" placeholder="Email Address">
-        <input type="password" id="loginPass" placeholder="Password">
-        <button onclick="doLogin()">Login</button>
+    <div class="column shop-col">
+        <h3> Shop Area</h3>
+
+        <div class="box">
+            <h2>Shop Registration</h2>
+            <input type="text" id="shopName" placeholder="Company Name">
+            <input type="text" id="shopOwner" placeholder="Owner Name">
+            <input type="text" id="shopAfm" placeholder="Shop Tax ID (AFM)">
+            <input type="password" id="shopPass" placeholder="Password">
+            <button class="btn-shop" onclick="registerShop()">Register Shop</button>
+        </div>
+
+        <div class="box">
+            <h2>Shop Login</h2>
+            <input type="text" id="shopLoginAfm" placeholder="Shop Tax ID (AFM)">
+            <input type="password" id="shopLoginPass" placeholder="Password">
+            <button class="btn-shop" onclick="loginShop()">Login</button>
+        </div>
     </div>
+
 </div>
 
 <script>
-    // --------- REGISTRATION FUNCTION ------------
-    async function doRegister() {
-        // 1. Collect data from the input fields
+    // ================== JAVASCRIPT FOR CITIZEN ==================
+
+    async function registerCitizen() {
         const data = {
-            name: document.getElementById("regName").value,
-            email: document.getElementById("regEmail").value,
-            password: document.getElementById("regPass").value,
-            afm: document.getElementById("regAfm").value
+            name: document.getElementById("citName").value,
+            email: document.getElementById("citEmail").value,
+            password: document.getElementById("citPass").value,
+            afm: document.getElementById("citAfm").value
         };
 
-        // 2. Send data to Backend (Controller)
-        try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data) // Convert JS object to JSON string
-            });
-
-            const message = await response.text(); // Read server response
-            alert("Server Message: " + message);
-
-        } catch (error) {
-            alert("Connection Error: " + error);
-        }
+        await sendRequest('/register', data);
     }
 
-    // ------------ LOGIN FUNCTION -----------
-    async function doLogin() {
-        // 1. Collect login credentials
+    async function loginCitizen() {
         const data = {
-            email: document.getElementById("loginEmail").value,
-            password: document.getElementById("loginPass").value
+            email: document.getElementById("citLoginEmail").value,
+            password: document.getElementById("citLoginPass").value
         };
 
-        // 2. Send data to Backend
+        // In the future, you can redirect here: window.location.href = "/products.html";
+        await sendRequest('/login', data);
+    }
+
+    // ================== JAVASCRIPT FOR SHOP ==================
+
+    async function registerShop() {
+        const data = {
+            companyName: document.getElementById("shopName").value,
+            owner: document.getElementById("shopOwner").value,
+            afm: document.getElementById("shopAfm").value,
+            password: document.getElementById("shopPass").value
+        };
+
+        // NOTE: We hit the URL /shop/register
+        await sendRequest('/shop/register', data);
+    }
+
+    async function loginShop() {
+        const data = {
+            afm: document.getElementById("shopLoginAfm").value,
+            password: document.getElementById("shopLoginPass").value
+        };
+
+        // NOTE: We hit the URL /shop/login
+        await sendRequest('/shop/login', data);
+    }
+
+    // ================== HELPER FUNCTION (To avoid repeating fetch code) ==================
+    async function sendRequest(url, data) {
         try {
-            const response = await fetch('/login', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
             const message = await response.text();
-
-            // Check if the response contains "Welcome" (Success)
-            if (message.includes("Welcome")) {
-                alert(" Success: " + message);
-                // Future step: Redirect to products page
-                // window.location.href = "/products.html";
-            } else {
-                alert(" Error: " + message);
-            }
+            alert("System Message:\n" + message);
 
         } catch (error) {
             alert("Connection Error: " + error);

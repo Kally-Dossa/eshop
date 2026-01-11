@@ -1,9 +1,9 @@
-package gr.university.eshop.Service;
+package gr.university.eshop.service;
 
-import gr.university.eshop.Entity.Cart;
-import gr.university.eshop.Entity.Citizen;
-import gr.university.eshop.Repository.CitizenRepository;
-import gr.university.eshop.DTO.CitizenRegisterDto;
+import gr.university.eshop.entity.Cart;
+import gr.university.eshop.entity.Citizen;
+import gr.university.eshop.repository.CitizenRepository;
+import gr.university.eshop.dto.CitizenRegisterDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
