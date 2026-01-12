@@ -6,6 +6,6 @@ import gr.university.eshop.model.Order;
 import java.util.List;
 
 
-public interface OrderRepository extends JpaRepository<Order, Long>{
-    List<Order> findByCitizen_AfmOrderByOrderDateDesc(Long afm);
+public interface OrderRepository extends JpaRepository<Order, String>{
+    List<Order> findByCitizen_AfmOrderByOrderDateDesc(String afm);
 }

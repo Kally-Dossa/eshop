@@ -1,5 +1,6 @@
 package gr.university.eshop.controller;
 
+import gr.university.eshop.dto.CitizenRegisterDto;
 import gr.university.eshop.dto.LoginDto;
 import gr.university.eshop.dto.ProductDto;
 import gr.university.eshop.dto.ShopRegisterDto;
@@ -76,7 +77,7 @@ public class ShopWebController {
                         Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("registerDto", new ShopRegisterDto()); // Ξαναβάζουμε το registerDto
+            model.addAttribute("registerDto", new ShopRegisterDto());
             return "index";
         }
 
@@ -91,7 +92,7 @@ public class ShopWebController {
         }
     }
 
-    // --- 4. DASHBOARD & ΛΟΙΠΕΣ ΛΕΙΤΟΥΡΓΙΕΣ (ΙΔΙΕΣ ΜΕ ΠΡΙΝ) ---
+    // --- 4. DASHBOARD & ΛΟΙΠΕΣ ΛΕΙΤΟΥΡΓΙΕΣ ---
     @GetMapping("/shop/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");
@@ -105,7 +106,7 @@ public class ShopWebController {
         return "dashboard";
     }
 
-    // ... (Οι υπόλοιπες μέθοδοι save/delete/update παραμένουν ίδιες) ...
+
     @PostMapping("/shop/products/save")
     public String saveProduct(@ModelAttribute ProductDto productDto, HttpSession session) {
         Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");

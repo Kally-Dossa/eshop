@@ -1,9 +1,8 @@
 package gr.university.eshop.service;
 
-import gr.university.eshop.model.Cart;
+import gr.university.eshop.dto.CitizenRegisterDto;
 import gr.university.eshop.model.Citizen;
 import gr.university.eshop.repository.CitizenRepository;
-import gr.university.eshop.dto.CitizenRegisterDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,43 +15,35 @@ public class CitizenService {
     @Autowired
     private CitizenRepository citizenRepository;
 
-    // FUNCTION 1: REGISTER
-    @Transactional // If something goes wrong, it cancels the entire process at the base.
-    public void registerCitizen(CitizenRegisterDto dto) throws Exception {
-
-        // Step 1: Check if the email already exists
+    @Transactional
+    public Citizen registerCitizen(CitizenRegisterDto dto) throws Exception {
+        // 1. Έλεγχος αν υπάρχει το Email
         if (citizenRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new Exception("This email already exists!");
+            throw new Exception("Το Email χρησιμοποιείται ήδη.");
         }
 
-        // Step 2: Transfer data from DTO to Entity (Table)
+        // 2. Έλεγχος αν υπάρχει το ΑΦΜ (αφού είναι Primary Key)
+        if (citizenRepository.existsById(dto.getAfm())) {
+            throw new Exception("Το ΑΦΜ υπάρχει ήδη.");
+        }
+
+        // 3. Δημιουργία και Αποθήκευση
         Citizen citizen = new Citizen();
+        citizen.setAfm(dto.getAfm());      // Set PK manually
         citizen.setName(dto.getName());
+        citizen.setSurname(dto.getSurname()); // Set Surname
         citizen.setEmail(dto.getEmail());
-        citizen.setPassword(dto.getPassword());
-        citizen.setAfm(dto.getAfm());
+        citizen.setPassword(dto.getPassword()); // Θυμηθείτε το hashing σε real app
 
-        // Step 3: Create an Empty Cart for the new customer
-        Cart cart = new Cart();
-        // We connect the basket to the citizen and back
-        cart.setCitizen(citizen);
-        citizen.setCart(cart);
-
-        // Step 4: save on db
-        citizenRepository.save(citizen);
+        return citizenRepository.save(citizen);
     }
 
-    // FUNCTION 2: LOGIN
     public Citizen login(String email, String password) throws Exception {
-
-        // We search for the citizen based on the email
-        Optional<Citizen> existingCitizen = citizenRepository.findByEmail(email);
-
-        // If the user exists AND the password is correct
-        if (existingCitizen.isPresent() && existingCitizen.get().getPassword().equals(password)) {
-            return existingCitizen.get(); // Return the user to put them in the Session
+        Optional<Citizen> existingUser = citizenRepository.findByEmail(email);
+        if (existingUser.isPresent() && existingUser.get().getPassword().equals(password)) {
+            return existingUser.get();
         } else {
-            throw new Exception("Wrong email or password!");
+            throw new Exception("Λάθος Email ή Κωδικός");
         }
     }
 }

@@ -6,7 +6,7 @@ import java.util.*;
 @Entity
 public class Shop {
     @Id
-    private Long afm; // ΑΦΜ ως ID
+    private String afm; // ΑΦΜ ως ID
     private String name; // Επωνυμία;
     private String email;
     private String password;
@@ -17,7 +17,7 @@ public class Shop {
 
     public Shop() {}
 
-    public Shop(Long afm, String name, String email, String password) {
+    public Shop(String afm, String name, String email, String password) {
         this.afm = afm;
         this.name = name;
         this.email = email;
@@ -30,13 +30,13 @@ public class Shop {
     }
 
     // Getters Setters
-    public Long getAfm() { return afm; }
+    public String getAfm() { return afm; }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setAfm(Long afm) {
+    public void setAfm(String afm) {
         this.afm = afm;
     }
 

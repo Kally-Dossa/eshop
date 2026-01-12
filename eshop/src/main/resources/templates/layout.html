@@ -9,20 +9,33 @@
         main { flex: 1; }
         .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .footer { background-color: #e9ecef; padding: 20px 0; margin-top: auto; }
+        .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
     <div class="container">
         <a class="navbar-brand fw-bold text-primary" th:href="@{/}">🛍️ Our E-Shop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
+
                 <li class="nav-item" th:if="${session.loggedInShop != null}">
-                    <a class="nav-link" th:href="@{/shop/dashboard}">📊 Dashboard</a>
+                    <a class="nav-link fw-bold" th:href="@{/shop/dashboard}">📊 Dashboard</a>
+                </li>
+
+                <li class="nav-item" th:if="${session.loggedInUser != null}">
+                    <a class="nav-link fw-bold" th:href="@{/user/dashboard}">
+                        👤 Dashboard (<span th:text="${session.loggedInUser.name}">User</span>)
+                    </a>
+                </li>
+
+                <li class="nav-item ms-2" th:if="${session.loggedInShop == null and session.loggedInUser == null}">
+                    <a class="btn btn-outline-primary btn-sm me-2" th:href="@{/login-page}">Login</a>
+                    <a class="btn btn-primary btn-sm" th:href="@{/register-page}">Register</a>
                 </li>
 
                 <li class="nav-item" th:if="${session.loggedInShop != null or session.loggedInUser != null}">

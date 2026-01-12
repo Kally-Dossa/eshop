@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::section})}">
+<body>
+<section class="py-5">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-dark">👋 Καλωσήρθες, <span class="text-primary" th:text="${session.loggedInUser.name}">User</span></h2>
+
+            <button class="btn btn-outline-primary" onclick="document.getElementById('pills-cart-tab').click()">
+                🛒 Καλάθι: <span class="badge bg-primary">[[${#lists.size(cart.items)}]]</span> είδη
+            </button>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+            [[${successMessage}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+            [[${errorMessage}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" id="pills-market-tab" data-bs-toggle="tab" data-bs-target="#pills-market" type="button">🏪 Αγορά Προϊόντων</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="pills-cart-tab" data-bs-toggle="tab" data-bs-target="#pills-cart" type="button">🛒 Το Καλάθι μου</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="pills-orders-tab" data-bs-toggle="tab" data-bs-target="#pills-orders" type="button">📜 Ιστορικό Παραγγελιών</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="pills-market" role="tabpanel">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col" th:each="product : ${products}">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <div class="badge bg-secondary mb-2" th:text="${product.type}">Category</div>
+                                <h5 class="card-title" th:text="${product.brand}">Brand</h5>
+                                <p class="card-text text-muted" th:text="${product.description}">Description</p>
+                                <h4 class="text-primary fw-bold">[[${product.price}]] €</h4>
+                                <small th:if="${product.stock > 0}" class="text-success">Διαθέσιμο</small>
+                                <small th:unless="${product.stock > 0}" class="text-danger">Εξαντλήθηκε</small>
+                            </div>
+                            <div class="card-footer bg-white border-0 pb-3">
+                                <form th:action="@{/user/cart/add}" method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 70px;" th:disabled="${product.stock == 0}">
+                                    <button type="submit" class="btn btn-primary flex-fill" th:disabled="${product.stock == 0}">
+                                        + Στο Καλάθι
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${products.empty}" class="alert alert-info">Δεν υπάρχουν διαθέσιμα προϊόντα αυτή τη στιγμή.</div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-cart" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Προϊόν</th>
+                                <th>Τιμή</th>
+                                <th>Ποσότητα</th>
+                                <th>Σύνολο</th>
+                                <th>Ενέργεια</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${cart.items}">
+                                <td>
+                                    <strong th:text="${item.product.brand}">Product</strong><br>
+                                    <small class="text-muted" th:text="${item.product.description}"></small>
+                                </td>
+                                <td th:text="${item.product.price} + ' €'"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td th:text="${item.product.price * item.quantity} + ' €'" class="fw-bold"></td>
+                                <td>
+                                    <form th:action="@{/user/cart/remove}" method="post">
+                                        <input type="hidden" name="productId" th:value="${item.product.id}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">❌ Διαγραφή</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${cart.items.empty}">
+                                <td colspan="5" class="text-center py-4 text-muted">Το καλάθι σας είναι άδειο.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div th:if="${not cart.items.empty}" class="d-flex justify-content-end align-items-center mt-3 border-top pt-3">
+                            <h4 class="me-4 mb-0">Γενικό Σύνολο: <span class="text-primary">[[${cart.totalPrice}]] €</span></h4>
+                            <form th:action="@{/user/checkout}" method="post">
+                                <button type="submit" class="btn btn-success btn-lg px-5">💳 Checkout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-orders" role="tabpanel">
+                <div class="accordion" id="ordersAccordion">
+                    <div class="accordion-item" th:each="order : ${orders}">
+                        <h2 class="accordion-header" th:id="'heading' + ${order.orderId}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    th:data-bs-target="'#collapse' + ${order.orderId}">
+                                <div class="d-flex w-100 justify-content-between me-3">
+                                    <span><strong>Παραγγελία #[[${order.orderId}]]</strong></span>
+                                    <span class="text-muted">[[${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}]]</span>
+                                    <span class="fw-bold text-success">[[${order.totalPrice}]] €</span>
+                                </div>
+                            </button>
+                        </h2>
+                        <div th:id="'collapse' + ${order.orderId}" class="accordion-collapse collapse" data-bs-parent="#ordersAccordion">
+                            <div class="accordion-body">
+                                <table class="table table-sm">
+                                    <thead><tr><th>Προϊόν</th><th>Τιμή Αγοράς</th><th>Ποσότητα</th></tr></thead>
+                                    <tbody>
+                                    <tr th:each="item : ${order.items}">
+                                        <td th:text="${item.productName}">Product</td>
+                                        <td th:text="${item.priceAtPurchase} + ' €'">Price</td>
+                                        <td th:text="${item.quantity}">Qty</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${orders.empty}" class="alert alert-warning mt-3">Δεν έχετε κάνει καμία παραγγελία ακόμα.</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

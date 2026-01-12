@@ -4,104 +4,20 @@
 <body>
 <section>
     <div class="container-fluid p-0 mb-5">
-        <img th:src="@{/img/eshop-banner.png}" alt="E-Shop Banner" class="img-fluid w-100" style="max-height: 350px; object-fit: cover;">
+        <img th:src="@{/img/eshop-banner.png}" alt="E-Shop Banner" class="img-fluid w-100" style="max-height: 400px; object-fit: cover;">
     </div>
 
-    <div class="container pb-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+    <div class="container text-center pb-5">
+        <h1 class="display-4 fw-bold text-dark mb-3">Καλώς ήρθατε στο E-Shop μας!</h1>
+        <p class="lead text-secondary mb-5">Βρείτε τα καλύτερα προϊόντα στις καλύτερες τιμές.</p>
 
-                <div th:if="${session.loggedInUser != null}" class="alert alert-info text-center">
-                    <h4>Καλωσήρθες, <span th:text="${session.loggedInUser.name}">User</span>! 👋</h4>
-                    <p>Περιηγήσου στα προϊόντα μας.</p>
-                </div>
+        <div th:if="${session.loggedInUser == null and session.loggedInShop == null}">
+            <a th:href="@{/register-page}" class="btn btn-lg btn-primary px-5 me-3">Ξεκινήστε εδώ</a>
+            <a th:href="@{/login-page}" class="btn btn-lg btn-outline-secondary px-5">Σύνδεση</a>
+        </div>
 
-                <div class="card shadow-sm" th:unless="${session.loggedInUser != null or session.loggedInShop != null}">
-                    <div class="card-body p-4">
-
-                        <div th:if="${successMessage}" class="alert alert-success text-center">[[${successMessage}]]</div>
-                        <div th:if="${errorMessage}" class="alert alert-danger text-center">[[${errorMessage}]]</div>
-
-                        <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button">🔑 Login</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-user-register-tab" data-bs-toggle="pill" data-bs-target="#pills-user-register" type="button">👤 New User</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-shop-register-tab" data-bs-toggle="pill" data-bs-target="#pills-shop-register" type="button">🛒 New Shop</button>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content" id="pills-tabContent">
-
-                            <div class="tab-pane fade show active" id="pills-login" role="tabpanel">
-                                <h4 class="text-center mb-3 text-secondary">Sign In</h4>
-
-                                <div th:if="${loginError}" class="alert alert-danger text-center py-2">
-                                    <small>[[${loginError}]]</small>
-                                </div>
-
-                                <form th:action="@{/login}" th:object="${userLoginDto}" method="post">
-                                    <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
-                                        <input type="email" th:field="*{email}" class="form-control" placeholder="name@example.com" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" th:field="*{password}" class="form-control" placeholder="******" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
-                                </form>
-                                <p class="text-center mt-3 text-muted small">Access for both Customers and Shop Partners</p>
-                            </div>
-
-                            <div class="tab-pane fade" id="pills-user-register" role="tabpanel">
-                                <h4 class="text-center mb-3 text-secondary">Customer Registration</h4>
-                                <form th:action="@{/user/register}" th:object="${userRegisterDto}" method="post">
-                                    <div class="mb-3">
-                                        <label class="form-label">Full Name</label>
-                                        <input type="text" th:field="*{name}" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" th:field="*{email}" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" th:field="*{password}" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-success w-100">Register as User</button>
-                                </form>
-                            </div>
-
-                            <div class="tab-pane fade" id="pills-shop-register" role="tabpanel">
-                                <h4 class="text-center mb-3 text-secondary">Partner Registration</h4>
-                                <form th:action="@{/shop/register}" th:object="${shopRegisterDto}" method="post">
-                                    <div class="mb-3">
-                                        <label class="form-label">Shop Name</label>
-                                        <input type="text" th:field="*{name}" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">AFM (Tax ID)</label>
-                                        <input type="text" th:field="*{afm}" class="form-control" placeholder="9 digits" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Business Email</label>
-                                        <input type="email" th:field="*{email}" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" th:field="*{password}" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-warning w-100 text-white">Register as Shop</button>
-                                </form>
-                            </div>
-
-                        </div> </div>
-                </div>
-            </div>
+        <div th:if="${session.loggedInUser != null}" class="alert alert-success d-inline-block px-5">
+            Συνεχίστε τις αγορές σας!
         </div>
     </div>
 </section>

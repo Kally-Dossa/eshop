@@ -34,8 +34,7 @@ public class ShopService {
         shop.setName(dto.getName());
         shop.setEmail(dto.getEmail());
         shop.setPassword(dto.getPassword());
-        shop.setAfm(dto.getAfm());
-
+        shop.setAfm(dto.getAfm()); // Μετατροπή String -> Long
         return shopRepository.save(shop); // Επιστροφή του αποθηκευμένου Shop
     }
 
@@ -66,7 +65,7 @@ public class ShopService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> getProductsByShopAfm(Long afm) {
+    public List<Product> getProductsByShopAfm(String afm) {
         return productRepository.findByShopAfm(afm);
     }
 }

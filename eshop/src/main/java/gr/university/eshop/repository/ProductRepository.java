@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByShopAfm(Long afm);
+    List<Product> findByShopAfm(String afm);
 }

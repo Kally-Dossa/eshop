@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::section})}">
+<body>
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4 text-primary">📝 Δημιουργία Λογαριασμού</h3>
+
+                        <div th:if="${errorMessage}" class="alert alert-danger text-center">[[${errorMessage}]]</div>
+
+                        <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        th:classappend="${activeTab == 'user'} ? 'active'"
+                                        id="pills-user-tab" data-bs-toggle="pill" data-bs-target="#pills-user" type="button">
+                                    👤 Πελάτης
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        th:classappend="${activeTab == 'shop'} ? 'active'"
+                                        id="pills-shop-tab" data-bs-toggle="pill" data-bs-target="#pills-shop" type="button">
+                                    🛒 Κατάστημα
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="pills-tabContent">
+
+                            <div class="tab-pane fade"
+                                 th:classappend="${activeTab == 'user'} ? 'show active'"
+                                 id="pills-user" role="tabpanel">
+
+                                <form th:action="@{/user/register}" th:object="${userRegisterDto}" method="post">
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Όνομα</label>
+                                            <input type="text" th:field="*{name}" class="form-control" required>
+                                            <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Επίθετο</label>
+                                            <input type="text" th:field="*{surname}" class="form-control" required>
+                                            <small class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">ΑΦΜ (Login ID)</label>
+                                        <input type="text" th:field="*{afm}" class="form-control" placeholder="9 ψηφία" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('afm')}" th:errors="*{afm}"></small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" th:field="*{email}" class="form-control" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Κωδικός</label>
+                                        <input type="password" th:field="*{password}" class="form-control" placeholder="******" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success w-100 py-2">Εγγραφή ως Πελάτης</button>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade"
+                                 th:classappend="${activeTab == 'shop'} ? 'show active'"
+                                 id="pills-shop" role="tabpanel">
+
+                                <form th:action="@{/shop/register}" th:object="${shopRegisterDto}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Επωνυμία Καταστήματος</label>
+                                        <input type="text" th:field="*{name}" class="form-control" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">ΑΦΜ</label>
+                                        <input type="text" th:field="*{afm}" class="form-control" placeholder="9 ψηφία" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('afm')}" th:errors="*{afm}"></small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" th:field="*{email}" class="form-control" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Κωδικός</label>
+                                        <input type="password" th:field="*{password}" class="form-control" placeholder="******" required>
+                                        <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-warning w-100 text-white py-2">Εγγραφή Καταστήματος</button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <small class="text-muted">Έχετε ήδη λογαριασμό;</small>
+                            <br>
+                            <a th:href="@{/login-page}" class="text-decoration-none fw-bold">Συνδεθείτε εδώ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
