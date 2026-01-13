@@ -1,7 +1,9 @@
 package gr.university.eshop.service;
 
 import gr.university.eshop.dto.CitizenRegisterDto;
+import gr.university.eshop.model.Cart;
 import gr.university.eshop.model.Citizen;
+import gr.university.eshop.repository.CartRepository;
 import gr.university.eshop.repository.CitizenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class CitizenService {
 
     @Autowired
     private CitizenRepository citizenRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Transactional
     public Citizen registerCitizen(CitizenRegisterDto dto) throws Exception {
@@ -36,7 +41,14 @@ public class CitizenService {
         citizen.setPassword(dto.getPassword()); // Θυμηθείτε το hashing σε real app
         citizen.setRole("CITIZEN");
 
-        return citizenRepository.save(citizen);
+        Citizen savedCitizen = citizenRepository.save(citizen);
+
+        //create empty cart
+        Cart cart = new Cart();
+        cart.setCitizen(savedCitizen);
+        cartRepository.save(cart);
+
+        return savedCitizen;
     }
 
     public Citizen login(String email, String password) throws Exception {
