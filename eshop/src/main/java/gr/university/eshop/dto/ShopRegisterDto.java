@@ -6,20 +6,20 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class ShopRegisterDto {
-    @NotBlank(message = "AFM is mandatory")
-    @Pattern(regexp = "^\\d{9}$", message = "AFM must be exactly 9 digits")
+    @NotBlank(message = "Το ΑΦΜ είναι υποχρεωτικό")
+    @Pattern(regexp = "^\\d{9}$", message = "Το ΑΦΜ πρέπει να έχει 9 ψηφία")
     private String afm;
 
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    @NotBlank(message = "Το Όνομα είναι υποχρεωτικό")
+    @Size(min = 2, max = 50, message = "Το όνομα πρέπει να έχει απο 2 έως 50 χαρακτήρες.")
     private String name;
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
+    @NotBlank(message = "Το Email είναι υποχρεωτικό")
+    @Email(message = "Μη έγκυρο Email")
     private String email;
 
-    @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotBlank(message = "Ο κωδικός είναι υποχρεωτικός")
+    @Size(min = 4, message = "Ο κωδικός πρέπει να είναι τουλάχιστον 8 χαρακτήρες")
     private String password;
 
     public ShopRegisterDto() {

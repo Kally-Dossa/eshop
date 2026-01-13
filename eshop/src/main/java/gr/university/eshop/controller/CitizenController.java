@@ -20,9 +20,9 @@ public class CitizenController {
     public String register(@RequestBody CitizenRegisterDto dto) {
         try {
             citizenService.registerCitizen(dto);
-            return "Registration completed successfully!";
+            return "Η σύνδεση ολοκληρώθηκε με επιτυχία!";
         } catch (Exception e) {
-            return "Registration error: " + e.getMessage();
+            return "Σφάλμα εγγραφής: " + e.getMessage();
         }
     }
 
@@ -32,9 +32,9 @@ public class CitizenController {
         try {
             Citizen citizen = citizenService.login(loginDto.getEmail(), loginDto.getPassword());
             session.setAttribute("loggedInUser", citizen);
-            return "Welcome " + citizen.getName();
+            return "Καλωσήρθες " + citizen.getName();
         } catch (Exception e) {
-            return "Connection error: " + e.getMessage();
+            return "Σφάλμα σύνδεσης: " + e.getMessage();
         }
     }
 
@@ -43,6 +43,6 @@ public class CitizenController {
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "You are logged out.";
+        return "Έχετε αποδυνδεθεί.";
     }
 }
