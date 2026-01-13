@@ -34,6 +34,7 @@ public class CitizenService {
         citizen.setSurname(dto.getSurname()); // Set Surname
         citizen.setEmail(dto.getEmail());
         citizen.setPassword(dto.getPassword()); // Θυμηθείτε το hashing σε real app
+        citizen.setRole("CITIZEN");
 
         return citizenRepository.save(citizen);
     }

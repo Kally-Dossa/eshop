@@ -10,6 +10,7 @@ public class Shop {
     private String name; // Επωνυμία;
     private String email;
     private String password;
+    private String role;
 
 
     @OneToMany(mappedBy="shop", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
@@ -17,11 +18,12 @@ public class Shop {
 
     public Shop() {}
 
-    public Shop(String afm, String name, String email, String password) {
+    public Shop(String afm, String name, String email, String password,  String role) {
         this.afm = afm;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public void addProduct(Product p) {
@@ -62,5 +64,8 @@ public class Shop {
 
     public String getName() { return name; }
     public List<Product> getProducts() { return products; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
 }

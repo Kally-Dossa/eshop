@@ -14,16 +14,18 @@ public class Citizen {
     private String surname;
     private String email;
     private String password;
+    private String role;
 
     public Citizen() {
     }
 
-    public Citizen(String afm, String name, String surname, String email, String password) {
+    public Citizen(String afm, String name, String surname, String email, String password, String role) {
         this.afm = afm;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     // Getters & Setters
@@ -41,4 +43,7 @@ public class Citizen {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

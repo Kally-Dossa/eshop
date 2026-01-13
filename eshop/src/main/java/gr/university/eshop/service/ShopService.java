@@ -35,6 +35,7 @@ public class ShopService {
         shop.setEmail(dto.getEmail());
         shop.setPassword(dto.getPassword());
         shop.setAfm(dto.getAfm()); // Μετατροπή String -> Long
+        shop.setRole("SHOP");
         return shopRepository.save(shop); // Επιστροφή του αποθηκευμένου Shop
     }
 
