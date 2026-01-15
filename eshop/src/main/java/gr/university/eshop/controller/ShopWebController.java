@@ -101,30 +101,86 @@ public class ShopWebController {
         List<Product> products = shopService.getProductsByShopAfm(loggedInShop.getAfm());
         model.addAttribute("shopName", loggedInShop.getName());
         model.addAttribute("products", products);
-        model.addAttribute("newProduct", new ProductDto());
+
+        // Only create a new DTO if one wasn't added by a redirect flash attribute (to keep form data if needed)
+        if (!model.containsAttribute("newProduct")) {
+            model.addAttribute("newProduct", new ProductDto());
+        }
 
         return "dashboard";
     }
 
-
     @PostMapping("/shop/products/save")
-    public String saveProduct(@ModelAttribute ProductDto productDto, HttpSession session) {
+    public String saveProduct(@ModelAttribute ProductDto productDto,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+
         Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");
-        if (loggedInShop != null) {
-            try { shopService.addProductToShop(loggedInShop, productDto); } catch (Exception e) { e.printStackTrace(); }
+        if (loggedInShop == null) return "redirect:/";
+
+        // --- VALIDATION: Check if Price is negative ---
+        if (productDto.getPrice() != null && productDto.getPrice() < 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Το προϊόν δεν αποθηκεύτηκε: Η τιμή δεν μπορεί να είναι αρνητική.");
+            return "redirect:/shop/dashboard";
         }
+
+        try {
+            shopService.addProductToShop(loggedInShop, productDto);
+            redirectAttributes.addFlashAttribute("successMessage", "Το προϊόν προστέθηκε επιτυχώς!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Σφάλμα κατά την αποθήκευση.");
+        }
+
         return "redirect:/shop/dashboard";
     }
 
     @PostMapping("/shop/products/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        shopService.deleteProduct(id);
+    public String deleteProduct(@PathVariable Long id,
+                                HttpSession session, // <--- Add this
+                                RedirectAttributes redirectAttributes) {
+
+        // 1. Get Logged in Shop
+        Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");
+        if (loggedInShop == null) return "redirect:/";
+
+        try {
+            // 2. Pass the shop to the service
+            shopService.deleteProduct(id, loggedInShop);
+            redirectAttributes.addFlashAttribute("successMessage", "Το προϊόν διαγράφηκε.");
+        } catch (Exception e) {
+            // This catches "Unauthorized" if they don't own the product
+            redirectAttributes.addFlashAttribute("errorMessage", "Σφάλμα: " + e.getMessage());
+        }
+
         return "redirect:/shop/dashboard";
     }
 
     @PostMapping("/shop/products/update-stock")
-    public String updateStock(@RequestParam Long productId, @RequestParam Integer newStock) {
-        try { shopService.updateProductStock(productId, newStock); } catch (Exception e) { e.printStackTrace(); }
+    public String updateStock(@RequestParam Long productId,
+                              @RequestParam Integer newStock,
+                              HttpSession session, // <--- Add this
+                              RedirectAttributes redirectAttributes) {
+
+        // 1. Get Logged in Shop
+        Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");
+        if (loggedInShop == null) return "redirect:/";
+
+        // Validation
+        if (newStock < 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Η ενημέρωση απέτυχε: Το απόθεμα δεν μπορεί να είναι αρνητικό.");
+            return "redirect:/shop/dashboard";
+        }
+
+        try {
+            // 2. Pass the shop to the service
+            shopService.updateProductStock(productId, newStock, loggedInShop);
+            redirectAttributes.addFlashAttribute("successMessage", "Το απόθεμα ενημερώθηκε.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Σφάλμα: " + e.getMessage());
+        }
+
         return "redirect:/shop/dashboard";
     }
 

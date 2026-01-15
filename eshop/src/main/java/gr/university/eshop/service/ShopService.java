@@ -39,7 +39,7 @@ public class ShopService {
         return shopRepository.save(shop); // Επιστροφή του αποθηκευμένου Shop
     }
 
-    // ... (Οι υπόλοιπες μέθοδοι login, addProduct κλπ παραμένουν ίδιες) ...
+
     public Shop login(String email, String password) throws Exception {
         Optional<Shop> existingShop = shopRepository.findByEmail(email);
         if (existingShop.isPresent() && existingShop.get().getPassword().equals(password)) {
@@ -56,14 +56,35 @@ public class ShopService {
         productRepository.save(product);
     }
 
-    public void updateProductStock(Long productId, Integer newStock) throws Exception {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
+    // Update the method signature to accept 'Shop loggedInShop'
+    public void updateProductStock(Long productId, Integer newStock, Shop loggedInShop) throws Exception {
+
+        // 1. Find the product
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new Exception("Product not found"));
+
+        // 2. SECURITY CHECK: Compare AFMs
+        if (!product.getShop().getAfm().equals(loggedInShop.getAfm())) {
+            throw new Exception("Unauthorized: You do not own this product.");
+        }
+
+        // 3. Update stock and save
         product.setStock(newStock);
         productRepository.save(product);
     }
 
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public void deleteProduct(Long productId, Shop loggedInShop) throws Exception {
+        // 1. Find the product
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new Exception("Product not found"));
+
+        // 2. CHECK: Does the product's shop ID match the logged-in shop AFM
+        if (!product.getShop().getAfm().equals(loggedInShop.getAfm())) {
+            throw new Exception("Unauthorized: You do not own this product.");
+        }
+
+        // 3. Delete
+        productRepository.delete(product);
     }
 
     public List<Product> getProductsByShopAfm(String afm) {

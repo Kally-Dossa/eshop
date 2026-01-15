@@ -1,18 +1,31 @@
 package gr.university.eshop.dto;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 
 public class ProductDto {
-
+    // Το @NotBlank ελέγχει να μην είναι null ΚΑΙ να μην είναι κενό κείμενο
+    @NotBlank(message = "Ο τύπος προϊόντος είναι υποχρεωτικός")
     private String type;
+
+    @NotBlank(message = "Η μάρκα είναι υποχρεωτική")
     private String brand;
     private String description;
+
+    @NotNull(message = "Η τιμή είναι υποχρεωτική")
+    @Min(value = 0, message = "Η τιμή δεν μπορεί να είναι αρνητική")
     private Double price;
+
+    @NotNull(message = "Το απόθεμα είναι υποχρεωτικό")
+    @Min(value = 0, message = "Το απόθεμα δεν μπορεί να είναι αρνητικό")
     private Integer stock;
 
-    // Κενός Constructor (Απαραίτητος)
+
     public ProductDto() {
     }
 
-    // Constructor με ορίσματα (Προαιρετικός, για δική σου ευκολία)
+
     public ProductDto(String type, String brand, String description, Double price, Integer stock) {
         this.type = type;
         this.brand = brand;
@@ -21,7 +34,7 @@ public class ProductDto {
         this.stock = stock;
     }
 
-    // --- GETTERS & SETTERS (ΑΥΤΑ ΕΛΕΙΠΑΝ) ---
+    // --- GETTERS & SETTERS ---
 
     public String getType() {
         return type;
