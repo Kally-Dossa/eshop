@@ -39,7 +39,7 @@ public class CartService {
         Cart selectedCart = getOrCreateCart(citizen);
         List<CartItem> items = new ArrayList<>();
 
-        for(CartItem cartItem : cartItemRepo.findAll()){
+        for(CartItem cartItem : cartItemRepo.findByCart_Id(selectedCart.getId())){
             if(selectedCart.getId().equals(cartItem.getCart().getId())) {
                 items.add(cartItem);
             }
@@ -108,7 +108,7 @@ public class CartService {
     public void clearCart(Citizen citizen) {
         Cart cart = getOrCreateCart(citizen);
         
-        for(CartItem item : cartItemRepo.findByCart(cart)){
+        for(CartItem item : cartItemRepo.findByCart_Id(cart.getId())){
             cartItemRepo.delete(item);
         }
         
@@ -119,9 +119,7 @@ public class CartService {
             .orElseGet(() -> {
                 Cart cart = new Cart();
                 cart.setCitizen(citizen);
-                //TODO
-                //citizen.setCart(cart);
-                //citizenRepo.save(citizen);
+                
                 return cartRepo.save(cart);
             });
     }    

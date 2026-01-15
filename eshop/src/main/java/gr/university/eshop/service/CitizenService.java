@@ -43,11 +43,10 @@ public class CitizenService {
 
         Citizen savedCitizen = citizenRepository.save(citizen);
 
-        //create empty cart
-        Cart cart = new Cart();
-        cart.setCitizen(savedCitizen);
-        cartRepository.save(cart);
-
+        /*
+        * in cartService for everyendpoint a method is used to retrieve user's cart
+        * if no cart is found then it is created so we do not need to create cart here
+        */
         return savedCitizen;
     }
 

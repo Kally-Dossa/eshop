@@ -50,7 +50,7 @@ public class OrderService {
         Cart cart = cartRepo.findByCitizen_Afm(citizen.getAfm())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart not found"));
         
-        List<CartItem> temp = cartItemRepo.findByCart(cart);
+        List<CartItem> temp = cartItemRepo.findByCart_Id(cart.getId());
         if(temp.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
         }
