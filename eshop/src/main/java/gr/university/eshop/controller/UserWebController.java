@@ -31,13 +31,19 @@ public class UserWebController {
 
     // --- 1. USER DASHBOARD (Προϊόντα, Καλάθι, Ιστορικό) ---
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
+    public String dashboard(@RequestParam(required = false) String search, HttpSession session, Model model) {
         Citizen citizen = (Citizen) session.getAttribute("loggedInUser");
         if (citizen == null) return "redirect:/login-page";
 
         try {
-            // 1. Λίστα Προϊόντων (Catalog)
-            List<Product> products = productRepository.findAll();
+
+            List<Product> products;
+            if (search != null && !search.isEmpty()) {
+                products = productRepository.findByBrandContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
+                model.addAttribute("searchQuery", search); // Για να μείνει το κείμενο στο κουτάκι
+            } else {
+                products = productRepository.findAll();
+            }
             model.addAttribute("products", products);
 
             // 2. Δεδομένα Καλαθιού

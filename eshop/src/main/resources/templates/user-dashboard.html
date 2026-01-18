@@ -37,8 +37,16 @@
         <div class="tab-content" id="myTabContent">
 
             <div class="tab-pane fade show active" id="pills-market" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="text" id="searchInput" class="form-control"
+                               placeholder="🔍 Πληκτρολόγησε για αναζήτηση..."
+                               onkeyup="filterProducts()">
+                    </div>
+                </div>
                 <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col" th:each="product : ${products}">
+<!--                    <div class="col" th:each="product : ${products}">-->
+                    <div class="col product-card" th:each="product : ${products}">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
                                 <div class="badge bg-secondary mb-2" th:text="${product.type}">Category</div>
@@ -142,6 +150,24 @@
 
         </div>
     </div>
+    <script>
+        function filterProducts() {
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toLowerCase();
+
+            var cards = document.getElementsByClassName("product-card");
+
+            for (var i = 0; i < cards.length; i++) {
+                var text = cards[i].textContent || cards[i].innerText;
+
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 </section>
 </body>
 </html>

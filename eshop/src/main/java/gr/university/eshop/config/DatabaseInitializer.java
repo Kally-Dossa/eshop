@@ -67,6 +67,24 @@ public class DatabaseInitializer implements CommandLineRunner {
             p3.setShop(shop);
             productRepository.save(p3);
 
+            Product p4 = new Product();
+            p4.setBrand("HP");
+            p4.setDescription("HP Victus 15-fb37");
+            p4.setPrice(850.00);
+            p4.setStock(16);
+            p4.setType("Laptop");
+            p4.setShop(shop);
+            productRepository.save(p4);
+
+            Product p5 = new Product();
+            p5.setBrand("Apple");
+            p5.setDescription("MacBook Air 13");
+            p5.setPrice(1000.00);
+            p5.setStock(10);
+            p5.setType("Laptop");
+            p5.setShop(shop);
+            productRepository.save(p5);
+
             // 3. Δημιουργία Χρήστη (Citizen)
             Citizen user = new Citizen();
             user.setAfm("123456789");
