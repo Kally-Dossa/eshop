@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import gr.university.eshop.dto.CheckoutResponseDto;
 import gr.university.eshop.dto.OrderDto;
 import gr.university.eshop.dto.OrderItemDto;
@@ -45,14 +42,14 @@ public class OrderService {
     private CartService cartService;
 
     @Transactional
-    public CheckoutResponseDto checkout(Citizen citizen) {
+    public CheckoutResponseDto checkout(Citizen citizen) throws Exception{
         
         Cart cart = cartRepo.findByCitizen_Afm(citizen.getAfm())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart not found"));
+            .orElseThrow(() -> new Exception("Το καλάθι δεν βρέθηκε."));
         
         List<CartItem> temp = cartItemRepo.findByCart_Id(cart.getId());
         if(temp.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
+            throw new Exception("Το καλάθι είναι άδειο.");
         }
 
         Order order = new Order();
@@ -64,11 +61,11 @@ public class OrderService {
         
         for(CartItem item : temp) {
             Product p = productRepo.findById(item.getProduct().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+                .orElseThrow(() -> new Exception("Το προϊόν δεν βρέθηκε."));
             
             //check for quantity
             if(p.getStock() < item.getQuantity()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough stock for product with ID "+p.getId());
+                throw new Exception("Δεν υπάρχει αρκετό απόθεμα από "+p.getBrand()+" "+p.getDescription());
             }
 
             //decrease product stock

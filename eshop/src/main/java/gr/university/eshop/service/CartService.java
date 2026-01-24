@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import gr.university.eshop.dto.GetCartDetailsDto;
 import gr.university.eshop.model.Cart;
 import gr.university.eshop.model.CartItem;
@@ -33,8 +30,8 @@ public class CartService {
     public GetCartDetailsDto getCart(Citizen citizen) {
         GetCartDetailsDto response = new GetCartDetailsDto();
         
-        /*retrieve citizen's cart , if citizen does not have a cart
-        * which should not happen, a cart is created and assigned to the citizen
+        /*retrieve citizen's cart , if citizen does not have one
+        * a cart is created
         */
         Cart selectedCart = getOrCreateCart(citizen);
         List<CartItem> items = new ArrayList<>();
@@ -52,14 +49,14 @@ public class CartService {
         return response;
     }
 
-    public void addItem(Citizen citizen, Long productId, int quantity) {
+    public void addItem(Citizen citizen, Long productId, int quantity) throws Exception{
         
         Product product = productRepo.findById(productId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not Found!"));
+            .orElseThrow(() -> new Exception("Το προϊόν δεν βρέθηκε."));
         
         //check if we have stock to add to cart
         if(product.getStock()<quantity) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough Stock of product");
+            throw new Exception("Δεν υπάρχει αρκετό απόθεμα.");
         }
         
         Cart cart = getOrCreateCart(citizen);
@@ -70,37 +67,41 @@ public class CartService {
         }
         else{
             CartItem existingCartItem = cartItemRepo.findByProductIdAndCartId(productId, cart.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "CartItem not Found"));
-            //Decided to work like this, when citizen add same product add the quantity added to existing    
+                .orElseThrow(() -> new Exception("Δεν βρέθηκε το προϊόν στο καλάθι."));
+            //Decided to work like this, when citizen add same product add the quantity added to existing
+            //need to check if new quantity plus the quanitty in the cart exceeds stock    
+            if(product.getStock()<quantity+existingCartItem.getQuantity()) {
+                throw new Exception("Το απόθεμα είναι μικρότερο από το άθροισμα της ποσότητας που επιλέχθηκε και αυτής στο καλάθι.");
+            }
             existingCartItem.setQuantity(existingCartItem.getQuantity()+quantity);
             cartItemRepo.save(existingCartItem);
         }
     }
  
     //updateItem should only update quantity
-    public void updateItemQuantity(Citizen citizen, Long productId, int quantity) {
+    public void updateItemQuantity(Citizen citizen, Long productId, int quantity) throws Exception{
         if(quantity<1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be >= 1");
+            throw new Exception("Η ποσότητα πρέπει να είναι >= 1");
         }
         
         Cart cart = getOrCreateCart(citizen);
 
         CartItem existingCartItem = cartItemRepo.findByProductIdAndCartId(productId, cart.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "CartItem not Found"));
+                .orElseThrow(() -> new Exception("Δεν βρέθηκε το προϊόν στο καλάθι."));
         
         
         if(existingCartItem.getProduct().getStock()< quantity) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Not enough stock of product");
+            throw new Exception("Δεν υπάρχει αρκετό απόθεμα.");
         }
         existingCartItem.setQuantity(quantity);
 
         cartItemRepo.save(existingCartItem);
     }
 
-    public void deleteItem(Citizen citizen, Long productId) {
+    public void deleteItem(Citizen citizen, Long productId) throws Exception{
         Cart cart = getOrCreateCart(citizen);
         CartItem existingCartItem = cartItemRepo.findByProductIdAndCartId(productId, cart.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "CartItem not Found"));
+                .orElseThrow(() -> new Exception("Δεν βρέθηκε το προϊόν στο καλάθι."));
         
         cartItemRepo.deleteById(existingCartItem.getId());
     }

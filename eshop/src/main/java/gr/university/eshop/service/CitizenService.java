@@ -7,6 +7,7 @@ import gr.university.eshop.repository.CartRepository;
 import gr.university.eshop.repository.CitizenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +20,9 @@ public class CitizenService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public Citizen registerCitizen(CitizenRegisterDto dto) throws Exception {
@@ -38,7 +42,8 @@ public class CitizenService {
         citizen.setName(dto.getName());
         citizen.setSurname(dto.getSurname()); // Set Surname
         citizen.setEmail(dto.getEmail());
-        citizen.setPassword(dto.getPassword()); // Θυμηθείτε το hashing σε real app
+        //always store hashed password and not plain text
+        citizen.setPassword(passwordEncoder.encode(dto.getPassword())); // Θυμηθείτε το hashing σε real app
         citizen.setRole("CITIZEN");
 
         Citizen savedCitizen = citizenRepository.save(citizen);
@@ -52,7 +57,9 @@ public class CitizenService {
 
     public Citizen login(String email, String password) throws Exception {
         Optional<Citizen> existingUser = citizenRepository.findByEmail(email);
-        if (existingUser.isPresent() && existingUser.get().getPassword().equals(password)) {
+        //before hashing pass applied 
+        //if (existingUser.isPresent() && existingUser.get().getPassword().equals(password)) {
+        if (existingUser.isPresent() && passwordEncoder.matches(password, existingUser.get().getPassword())) {
             return existingUser.get();
         } else {
             throw new Exception("Λάθος Email ή Κωδικός");

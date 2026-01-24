@@ -7,6 +7,7 @@ import gr.university.eshop.model.Product;
 import gr.university.eshop.repository.ProductRepository;
 import gr.university.eshop.service.CartService;
 import gr.university.eshop.service.OrderService;
+import gr.university.eshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +17,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/user")
 public class UserWebController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private CartService cartService;
@@ -31,19 +36,33 @@ public class UserWebController {
 
     // --- 1. USER DASHBOARD (Προϊόντα, Καλάθι, Ιστορικό) ---
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam(required = false) String search, HttpSession session, Model model) {
+    public String dashboard(
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String brand,
+        @RequestParam(required = false) String description,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice,
+        HttpSession session,
+        Model model
+    ) {
         Citizen citizen = (Citizen) session.getAttribute("loggedInUser");
         if (citizen == null) return "redirect:/login-page";
 
         try {
-
+            /*/
             List<Product> products;
             if (search != null && !search.isEmpty()) {
-                products = productRepository.findByBrandContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
-                model.addAttribute("searchQuery", search); // Για να μείνει το κείμενο στο κουτάκι
+                //products = productRepository.findByBrandContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
+                //model.addAttribute("searchQuery", search); // Για να μείνει το κείμενο στο κουτάκι
+                products = (List<Product>) model.getAttribute("products");
+                System.out.println(products.getFirst().getBrand());
             } else {
                 products = productRepository.findAll();
             }
+            */
+            List<Product> products = productService.search(type, brand, description, minPrice, maxPrice);
+
+
             model.addAttribute("products", products);
 
             // 2. Δεδομένα Καλαθιού
@@ -107,4 +126,28 @@ public class UserWebController {
         }
         return "redirect:/user/dashboard";
     }
+
+    // search with JpaSpecification
+    @GetMapping("/search")
+    public String searchProducts(
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String brand,
+        @RequestParam(required = false) String description,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice,
+        RedirectAttributes redirectAttributes
+    ) {
+        try {
+            redirectAttributes.addAttribute("type", type);
+            redirectAttributes.addAttribute("brand", brand);
+            redirectAttributes.addAttribute("description", description);
+            redirectAttributes.addAttribute("minPrice", minPrice);
+            redirectAttributes.addAttribute("maxPrice", maxPrice);
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Αποτυχία αναζήτησης: " + e.getMessage());
+        }
+        return "redirect:/user/dashboard";
+    }
+    
 }

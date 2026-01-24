@@ -71,7 +71,7 @@ public class MainController {
                 return "redirect:/shop/dashboard";
             } catch (Exception e2) {
                 model.addAttribute("loginError", "Λάθος Email ή Κωδικός");
-                return "login"; // Επιστροφή στο login.html μ
+                return "login"; // Επιστροφή στο login.html
             }
         }
     }

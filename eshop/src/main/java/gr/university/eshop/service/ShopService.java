@@ -8,6 +8,7 @@ import gr.university.eshop.dto.ProductDto;
 import gr.university.eshop.dto.ShopRegisterDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class ShopService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     // REGISTER SHOP (Αλλαγή: Επιστρέφει Shop αντί για void)
     @Transactional
     public Shop registerShop(ShopRegisterDto dto) throws Exception {
@@ -33,7 +37,7 @@ public class ShopService {
         Shop shop = new Shop();
         shop.setName(dto.getName());
         shop.setEmail(dto.getEmail());
-        shop.setPassword(dto.getPassword());
+        shop.setPassword(passwordEncoder.encode(dto.getPassword()));
         shop.setAfm(dto.getAfm()); // Μετατροπή String -> Long
         shop.setRole("SHOP");
         return shopRepository.save(shop); // Επιστροφή του αποθηκευμένου Shop
@@ -42,7 +46,9 @@ public class ShopService {
 
     public Shop login(String email, String password) throws Exception {
         Optional<Shop> existingShop = shopRepository.findByEmail(email);
-        if (existingShop.isPresent() && existingShop.get().getPassword().equals(password)) {
+        //before hashing was applied
+        //if (existingShop.isPresent() && existingShop.get().getPassword().equals(password)) {
+        if (existingShop.isPresent() && passwordEncoder.matches(password, existingShop.get().getPassword())) {
             return existingShop.get();
         } else {
             throw new Exception("Wrong email or password!");

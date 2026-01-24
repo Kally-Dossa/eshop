@@ -10,6 +10,7 @@ import gr.university.eshop.repository.ProductRepository;
 import gr.university.eshop.repository.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
         if (productRepository.count() == 0) {
@@ -35,7 +39,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             shop.setAfm("999999999");
             shop.setName("Tech Store");
             shop.setEmail("shop@tech.gr");
-            shop.setPassword("1234");
+            shop.setPassword(passwordEncoder.encode("1234"));
             shop.setRole("SHOP");
             shopRepository.save(shop);
 
@@ -91,14 +95,14 @@ public class DatabaseInitializer implements CommandLineRunner {
             user.setName("Γιάννης");
             user.setSurname("Παπαδόπουλος");
             user.setEmail("user@test.gr");
-            user.setPassword("1234");
+            user.setPassword(passwordEncoder.encode("1234"));
             user.setRole("CITIZEN");
             Citizen savedUser = citizenRepository.save(user);
 
             // 4. Δημιουργία Καλαθιού
-            Cart cart = new Cart();
-            cart.setCitizen(savedUser);
-            cartRepository.save(cart);
+            //Cart cart = new Cart();
+            //cart.setCitizen(savedUser);
+            //cartRepository.save(cart);
 
             System.out.println("--- Η ΒΑΣΗ ΓΕΜΙΣΕ ΕΠΙΤΥΧΩΣ ---");
         }
