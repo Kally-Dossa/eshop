@@ -39,9 +39,7 @@
             <div class="tab-pane fade show active" id="pills-market" role="tabpanel">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <!--<input type="text" id="searchInput" class="form-control"
-                               placeholder="🔍 Πληκτρολόγησε για αναζήτηση..."
-                               onkeyup="filterProducts()"> -->
+
                         <form th:action="@{/user/search}" method="get" class="search-form">
                             <div class="row">
                                 <input type="text" name="type" placeholder="Type" th:value="${type}" />
@@ -57,6 +55,10 @@
 
                                 <input type="number" step="0.01" name="maxPrice" placeholder="Max price" th:value="${maxPrice}" />
                             </div>
+                            
+                            <!-- so that if user changed page size, after search the page size is retained  -->
+                            <input type="hidden" name="size" th:value="${size}" />
+                            
                             <div class="row buttons">
                                 <button type="submit" class="btn primary">Search</button>
                                 <!-- Clear button -->
@@ -68,7 +70,6 @@
                     </div>
                 </div>
                 <div class="row row-cols-1 row-cols-md-3 g-4">
-<!--                    <div class="col" th:each="product : ${products}">-->
                     <div class="col product-card" th:each="product : ${products}">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
@@ -93,7 +94,40 @@
                 </div>
                 <div th:if="${products.empty}" class="alert alert-info">Δεν υπάρχουν διαθέσιμα προϊόντα αυτή τη στιγμή.</div>
             </div>
+            <!-- pagination controls -->
+            <div class="pagination" th:if="${totalPages > 1}">
+                <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:href="@{/user/dashboard(
+                    page=${i},
+                    size=${size},
+                    type=${type},
+                    brand=${brand},
+                    description=${description},
+                    minPrice=${minPrice},
+                    maxPrice=${maxPrice}
+                    )}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                </a>
+            </div>
+            <!-- page size change-->
+            <form th:action="@{/user/dashboard}" method="get" class="page-size-form">
+                <!-- keep current filters hidden -->
+                <input type="hidden" name="type" th:value="${type}">
+                <input type="hidden" name="brand" th:value="${brand}">
+                <input type="hidden" name="description" th:value="${description}">
+                <input type="hidden" name="minPrice" th:value="${minPrice}">
+                <input type="hidden" name="maxPrice" th:value="${maxPrice}">
+                <input type="hidden" name="page" value="0">
 
+                <label for="size">Products per page:</label>
+                <select name="size" id="size" onchange="this.form.submit()">
+                <option value="2"  th:selected="${size == 2}">2</option>
+                <option value="10" th:selected="${size == 10}">10</option>
+                <option value="25" th:selected="${size == 25}">25</option>
+                <option value="50" th:selected="${size == 50}">50</option>
+                </select>
+            </form>
             <div class="tab-pane fade" id="pills-cart" role="tabpanel">
                 <div class="card shadow-sm">
                     <div class="card-body">

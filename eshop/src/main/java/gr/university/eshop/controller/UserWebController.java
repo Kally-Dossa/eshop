@@ -10,6 +10,7 @@ import gr.university.eshop.service.OrderService;
 import gr.university.eshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class UserWebController {
         @RequestParam(required = false) String description,
         @RequestParam(required = false) Double minPrice,
         @RequestParam(required = false) Double maxPrice,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "2") int size,
         HttpSession session,
         Model model
     ) {
@@ -49,21 +52,15 @@ public class UserWebController {
         if (citizen == null) return "redirect:/login-page";
 
         try {
-            /*/
-            List<Product> products;
-            if (search != null && !search.isEmpty()) {
-                //products = productRepository.findByBrandContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
-                //model.addAttribute("searchQuery", search); // Για να μείνει το κείμενο στο κουτάκι
-                products = (List<Product>) model.getAttribute("products");
-                System.out.println(products.getFirst().getBrand());
-            } else {
-                products = productRepository.findAll();
-            }
-            */
-            List<Product> products = productService.search(type, brand, description, minPrice, maxPrice);
+            
+            Page<Product> products = productService.search(type, brand, description, minPrice, maxPrice, page, size);
 
 
-            model.addAttribute("products", products);
+            model.addAttribute("products", products.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", products.getTotalPages());
+
+            model.addAttribute("size", size);
 
             // 2. Δεδομένα Καλαθιού
             GetCartDetailsDto cartDetails = cartService.getCart(citizen);
@@ -135,6 +132,7 @@ public class UserWebController {
         @RequestParam(required = false) String description,
         @RequestParam(required = false) Double minPrice,
         @RequestParam(required = false) Double maxPrice,
+        @RequestParam(required = false) Integer size,
         RedirectAttributes redirectAttributes
     ) {
         try {
@@ -143,6 +141,10 @@ public class UserWebController {
             redirectAttributes.addAttribute("description", description);
             redirectAttributes.addAttribute("minPrice", minPrice);
             redirectAttributes.addAttribute("maxPrice", maxPrice);
+
+            if (size != null) {
+                redirectAttributes.addAttribute("size", size);
+            }
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Αποτυχία αναζήτησης: " + e.getMessage());
