@@ -43,6 +43,14 @@ public class DatabaseInitializer implements CommandLineRunner {
             shop.setRole("SHOP");
             shopRepository.save(shop);
 
+            Shop homeStore = new Shop();
+            homeStore.setAfm("888888888");
+            homeStore.setName("Home & Gadget");
+            homeStore.setEmail("sales@homegadget.gr");
+            homeStore.setPassword(passwordEncoder.encode("1234"));
+            homeStore.setRole("SHOP");
+            shopRepository.save(homeStore);
+
             // 2. Δημιουργία Προϊόντων
             Product p1 = new Product();
             p1.setBrand("Apple");
@@ -89,6 +97,78 @@ public class DatabaseInitializer implements CommandLineRunner {
             p5.setShop(shop);
             productRepository.save(p5);
 
+            Product p6 = new Product();
+            p6.setBrand("Logitech");
+            p6.setDescription("MX Master 3S Mouse");
+            p6.setPrice(99.00);
+            p6.setStock(25);
+            p6.setType("Accessory");
+            p6.setShop(shop);
+            productRepository.save(p6);
+
+            Product p7 = new Product();
+            p7.setBrand("Dell");
+            p7.setDescription("UltraSharp 27 Monitor");
+            p7.setPrice(450.00);
+            p7.setStock(8);
+            p7.setType("Monitor");
+            p7.setShop(shop);
+            productRepository.save(p7);
+
+            Product p8 = new Product();
+            p8.setBrand("Sony");
+            p8.setDescription("WH-1000XM5 Headphones");
+            p8.setPrice(320.00);
+            p8.setStock(12);
+            p8.setType("Audio");
+            p8.setShop(shop);
+            productRepository.save(p8);
+
+            Product p9 = new Product();
+            p9.setBrand("Xiaomi");
+            p9.setDescription("Redmi Note 13 Pro");
+            p9.setPrice(350.00);
+            p9.setStock(15);
+            p9.setType("Smartphone");
+            p9.setShop(shop);
+            productRepository.save(p9);
+
+            Product p10 = new Product();
+            p10.setBrand("Nintendo");
+            p10.setDescription("Switch OLED Model");
+            p10.setPrice(340.00);
+            p10.setStock(10);
+            p10.setType("Console");
+            p10.setShop(shop);
+            productRepository.save(p10);
+
+            Product p11 = new Product();
+            p11.setBrand("Razer");
+            p11.setDescription("BlackWidow V4 Keyboard");
+            p11.setPrice(180.00);
+            p11.setStock(7);
+            p11.setType("Accessory");
+            p11.setShop(shop);
+            productRepository.save(p11);
+
+            Product p12 = new Product();
+            p12.setBrand("Asus");
+            p12.setDescription("ROG Zephyrus G14");
+            p12.setPrice(1900.00);
+            p12.setStock(3);
+            p12.setType("Laptop");
+            p12.setShop(shop);
+            productRepository.save(p12);
+
+            Product p13 = new Product();
+            p13.setBrand("Samsung");
+            p13.setDescription("Odyssey G5 32\"");
+            p13.setPrice(300.00);
+            p13.setStock(14);
+            p13.setType("Monitor");
+            p13.setShop(shop);
+            productRepository.save(p13);
+
             // 3. Δημιουργία Χρήστη (Citizen)
             Citizen user = new Citizen();
             user.setAfm("123456789");
@@ -98,6 +178,24 @@ public class DatabaseInitializer implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode("1234"));
             user.setRole("CITIZEN");
             Citizen savedUser = citizenRepository.save(user);
+
+            Citizen user2 = new Citizen();
+            user2.setAfm("987654321");
+            user2.setName("Μαρία");
+            user2.setSurname("Κωνσταντίνου");
+            user2.setEmail("maria@test.gr");
+            user2.setPassword(passwordEncoder.encode("maria1234567"));
+            user2.setRole("CITIZEN");
+            citizenRepository.save(user2);
+
+            Citizen user3 = new Citizen();
+            user3.setAfm("111222333");
+            user3.setName("Νίκος");
+            user3.setSurname("Γεωργίου");
+            user3.setEmail("nikos@test.gr");
+            user3.setPassword(passwordEncoder.encode("nikos123"));
+            user3.setRole("CITIZEN");
+            citizenRepository.save(user3);
 
             // 4. Δημιουργία Καλαθιού
             //Cart cart = new Cart();
