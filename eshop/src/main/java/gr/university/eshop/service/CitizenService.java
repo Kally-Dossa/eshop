@@ -26,12 +26,22 @@ public class CitizenService {
 
     @Transactional
     public Citizen registerCitizen(CitizenRegisterDto dto) throws Exception {
-        // 1. Έλεγχος αν υπάρχει το Email
+        // 1. Έλεγχος αν τα βασικά πεδία είναι null ή κενά (trimmed)
+        if (dto.getAfm() == null || dto.getEmail() == null || dto.getPassword() == null) {
+            throw new Exception("Παρακαλώ συμπληρώστε όλα τα απαραίτητα πεδία.");
+        }
+
+        // 2. Έλεγχος ΑΦΜ (Μήκος και αν είναι αριθμητικό)
+        if (dto.getAfm().length() != 9 || !dto.getAfm().matches("\\d+")) {
+            throw new Exception("Το ΑΦΜ πρέπει να αποτελείται από ακριβώς 9 ψηφία.");
+        }
+
+        // 3. Έλεγχος μοναδικότητας Email
         if (citizenRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new Exception("Το Email χρησιμοποιείται ήδη.");
         }
 
-        // 2. Έλεγχος αν υπάρχει το ΑΦΜ (αφού είναι Primary Key)
+        // 4. Έλεγχος αν υπάρχει ήδη το ΑΦΜ
         if (citizenRepository.existsById(dto.getAfm())) {
             throw new Exception("Το ΑΦΜ υπάρχει ήδη.");
         }
