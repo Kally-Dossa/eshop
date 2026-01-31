@@ -162,7 +162,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
             Product p13 = new Product();
             p13.setBrand("Samsung");
-            p13.setDescription("Odyssey G5 32\"");
+            p13.setDescription("Odyssey G5 32");
             p13.setPrice(300.00);
             p13.setStock(14);
             p13.setType("Monitor");
