@@ -19,7 +19,7 @@ public class ShopRegisterDto {
     private String email;
 
     @NotBlank(message = "Ο κωδικός είναι υποχρεωτικός")
-    @Size(min = 4, message = "Ο κωδικός πρέπει να είναι τουλάχιστον 8 χαρακτήρες")
+    @Size(min = 4, message = "Ο κωδικός πρέπει να είναι τουλάχιστον 4 χαρακτήρες")
     private String password;
 
     public ShopRegisterDto() {

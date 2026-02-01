@@ -5,96 +5,153 @@
 <section class="py-5">
     <div class="container">
 
-        <script th:if="${errorMessage}">
-            alert("⚠️ ΣΦΑΛΜΑ: [[${errorMessage}]]");
-        </script>
-
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i> <strong th:text="${successMessage}"></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>⚠️ ΣΦΑΛΜΑ: [[${errorMessage}]]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-secondary">📊 Shop Dashboard: <span class="text-primary" th:text="${shopName}"></span></h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                + New Product
+            <h2 class="text-dark">📊 Shop Dashboard: <span class="text-primary" th:text="${shopName}"></span></h2>
+            <button type="button" class="btn btn-primary shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="bi bi-plus-lg me-1"></i> Νέο Προϊόν
             </button>
         </div>
 
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                    <tr><th>Type</th><th>Brand</th><th>Description</th><th>Price (€)</th><th>Stock</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="product : ${products}">
-                        <td th:text="${product.type}"></td>
-                        <td th:text="${product.brand}"></td>
-                        <td th:text="${product.description}"></td>
-                        <td th:text="${product.price}"></td>
-                        <td>
-                            <form th:action="@{/shop/products/update-stock}" method="post" class="d-flex align-items-center" onsubmit="return validateStock(this)">
-                                <input type="hidden" name="productId" th:value="${product.id}">
-                                <input type="number" name="newStock" th:value="${product.stock}" min="0" class="form-control form-control-sm text-center" style="width: 70px;">
-                                <button type="submit" class="btn btn-sm btn-outline-success ms-2">OK</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form th:action="@{'/shop/products/delete/' + ${product.id}}" method="post">
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div th:if="${products.empty}" class="alert alert-info text-center mt-3 mb-0">No products yet.</div>
+        <div class="card shadow-sm border-0 transition-hover">
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr class="text-muted small fw-bold">
+                            <th>ΤΥΠΟΣ</th>
+                            <th>ΜΑΡΚΑ</th>
+                            <th>ΠΕΡΙΓΡΑΦΗ</th>
+                            <th>ΤΙΜΗ (€)</th>
+                            <th style="width: 150px;">ΑΠΟΘΕΜΑ</th>
+                            <th class="text-end">ΕΝΕΡΓΕΙΕΣ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${products}">
+                            <td><span class="badge bg-secondary-subtle text-dark px-2" th:text="${product.type}"></span></td>
+                            <td class="fw-bold" th:text="${product.brand}"></td>
+                            <td class="text-muted small" th:text="${product.description}"></td>
+                            <td class="fw-bold text-primary" th:text="${product.price} + ' €'"></td>
+
+                            <td>
+                                <form th:action="@{/shop/products/update-stock}" method="post" class="d-flex align-items-center" onsubmit="return validateStock(this)">
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <input type="number" name="newStock" th:value="${product.stock}" min="0" class="form-control form-control-sm text-center shadow-sm" style="width: 70px;">
+                                    <button type="submit" class="btn btn-sm btn-success ms-2 px-2 shadow-sm">
+                                        OK
+                                    </button>
+                                </form>
+                            </td>
+
+                            <td class="text-end">
+                                <form th:action="@{'/shop/products/delete/' + ${product.id}}" method="post" style="display: inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-danger px-3 shadow-sm" onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις το προϊόν;')">
+                                        Διαγραφή
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <nav th:if="${totalPages > 1}" aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center shadow-sm">
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/shop/dashboard(page=${currentPage - 1})}">&laquo;</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link" th:text="${i + 1}" th:href="@{/shop/dashboard(page=${i})}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/shop/dashboard(page=${currentPage + 1})}">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div th:if="${products.empty}" class="alert alert-info text-center mt-3 mb-0 border-0">Δεν υπάρχουν προϊόντα.</div>
             </div>
         </div>
 
         <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">Add New Product</h5>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-primary text-white border-0">
+                        <h5 class="modal-title fw-bold">Προσθήκη Νέου Προϊόντος</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-4">
                         <form th:action="@{/shop/products/save}" th:object="${newProduct}" method="post" onsubmit="return validateNewProduct()">
                             <div class="row">
-                                <div class="col-md-6 mb-3"><label class="form-label">Type</label><input type="text" th:field="*{type}" class="form-control" required></div>
-                                <div class="col-md-6 mb-3"><label class="form-label">Brand</label><input type="text" th:field="*{brand}" class="form-control" required></div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold text-muted">Τύπος</label>
+                                    <input type="text" th:field="*{type}" class="form-control shadow-sm" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold text-muted">Μάρκα</label>
+                                    <input type="text" th:field="*{brand}" class="form-control shadow-sm" required>
+                                </div>
                             </div>
-                            <div class="mb-3"><label class="form-label">Description</label><textarea th:field="*{description}" class="form-control" rows="2"></textarea></div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">Περιγραφή</label>
+                                <textarea th:field="*{description}" class="form-control shadow-sm" rows="2"></textarea>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Price (€)</label>
-                                    <input type="number" step="0.01" min="0" id="newPrice" th:field="*{price}" class="form-control" required>
+                                    <label class="form-label small fw-bold text-muted">Τιμή (€)</label>
+                                    <input type="number" step="0.01" min="0" id="newPrice" th:field="*{price}" class="form-control shadow-sm" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Stock</label>
-                                    <input type="number" min="0" id="newStock" th:field="*{stock}" class="form-control" required>
+                                    <label class="form-label small fw-bold text-muted">Απόθεμα</label>
+                                    <input type="number" min="0" id="newStock" th:field="*{stock}" class="form-control shadow-sm" required>
                                 </div>
                             </div>
-                            <div class="modal-footer border-0">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Save Product</button>
+                            <div class="modal-footer border-0 px-0 pb-0 mt-3">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Ακύρωση</button>
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm">Αποθήκευση</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <style>
+        .transition-hover:hover {
+            transform: translateY(-3px);
+            transition: 0.3s ease;
+        }
+        .page-link {
+            border-radius: 5px !important;
+            margin: 0 2px;
+            color: #444;
+            border: none;
+            background-color: #f8f9fa;
+        }
+        .page-item.active .page-link {
+            background-color: #0d6efd;
+            color: white;
+            box-shadow: 0 2px 5px rgba(13,110,253,0.3);
+        }
+        .bg-secondary-subtle { background-color: #eef1f4; }
+    </style>
 
     <script>
         function validateStock(form) {
             let stockInput = form.querySelector('input[name="newStock"]');
-            let stockValue = parseFloat(stockInput.value);
-
-            if (stockValue < 0) {
-                alert("⚠️ ΠΡΟΣΟΧΗ: Το απόθεμα δεν μπορεί να είναι αρνητικό!");
+            if (parseFloat(stockInput.value) < 0) {
+                alert("⚠️ Το απόθεμα δεν μπορεί να είναι αρνητικό!");
                 return false;
             }
             return true;
@@ -103,19 +160,13 @@
         function validateNewProduct() {
             let price = document.getElementById("newPrice").value;
             let stock = document.getElementById("newStock").value;
-
-            if (price < 0) {
-                alert("⚠️ ΠΡΟΣΟΧΗ: Η τιμή δεν μπορεί να είναι αρνητική!");
-                return false;
-            }
-            if (stock < 0) {
-                alert("⚠️ ΠΡΟΣΟΧΗ: Το απόθεμα δεν μπορεί να είναι αρνητικό!");
+            if (price < 0 || stock < 0) {
+                alert("⚠️ Τιμή και απόθεμα δεν μπορούν να είναι αρνητικά!");
                 return false;
             }
             return true;
         }
     </script>
-
 </section>
 </body>
 </html>

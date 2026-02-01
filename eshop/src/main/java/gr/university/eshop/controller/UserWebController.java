@@ -44,10 +44,12 @@ public class UserWebController {
         @RequestParam(required = false) Double minPrice,
         @RequestParam(required = false) Double maxPrice,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "2") int size,
+        @RequestParam(defaultValue = "5") int size,
         HttpSession session,
         Model model
     ) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
         Citizen citizen = (Citizen) session.getAttribute("loggedInUser");
         if (citizen == null) return "redirect:/login-page";
 
@@ -83,6 +85,8 @@ public class UserWebController {
                             @RequestParam(defaultValue = "1") int quantity,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
+
+
         Citizen citizen = (Citizen) session.getAttribute("loggedInUser");
         if (citizen == null) return "redirect:/login-page";
 
@@ -151,5 +155,7 @@ public class UserWebController {
         }
         return "redirect:/user/dashboard";
     }
+
+
     
 }

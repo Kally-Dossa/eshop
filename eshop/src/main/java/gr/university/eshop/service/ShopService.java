@@ -1,5 +1,7 @@
 package gr.university.eshop.service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import gr.university.eshop.model.Product;
 import gr.university.eshop.model.Shop;
 import gr.university.eshop.repository.ProductRepository;
@@ -26,7 +28,7 @@ public class ShopService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // REGISTER SHOP (Αλλαγή: Επιστρέφει Shop αντί για void)
+    // REGISTER SHOP
     @Transactional
     public Shop registerShop(ShopRegisterDto dto) throws Exception {
         // Check if email exists
@@ -46,8 +48,6 @@ public class ShopService {
 
     public Shop login(String email, String password) throws Exception {
         Optional<Shop> existingShop = shopRepository.findByEmail(email);
-        //before hashing was applied
-        //if (existingShop.isPresent() && existingShop.get().getPassword().equals(password)) {
         if (existingShop.isPresent() && passwordEncoder.matches(password, existingShop.get().getPassword())) {
             return existingShop.get();
         } else {
@@ -55,26 +55,39 @@ public class ShopService {
         }
     }
 
+    public Page<Product> getProductsByShopAfmPaginated(String afm, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAllByShopAfm(afm, pageable);
+    }
+
+    @Transactional
     public void addProductToShop(Shop shop, ProductDto productDto) throws Exception {
         if (shop == null) throw new Exception("Shop not found");
+
+        //  Έλεγχος τιμής
+        if (productDto.getPrice() != null && productDto.getPrice() < 0) {
+            throw new IllegalArgumentException("Η τιμή δεν μπορεί να είναι αρνητική.");
+        }
+
         Product product = new Product(productDto);
         product.setShop(shop);
         productRepository.save(product);
     }
 
-    // Update the method signature to accept 'Shop loggedInShop'
+    @Transactional
     public void updateProductStock(Long productId, Integer newStock, Shop loggedInShop) throws Exception {
+        // Έλεγχος αποθέματος
+        if (newStock < 0) {
+            throw new IllegalArgumentException("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
+        }
 
-        // 1. Find the product
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new Exception("Product not found"));
 
-        // 2. SECURITY CHECK: Compare AFMs
         if (!product.getShop().getAfm().equals(loggedInShop.getAfm())) {
             throw new Exception("Unauthorized: You do not own this product.");
         }
 
-        // 3. Update stock and save
         product.setStock(newStock);
         productRepository.save(product);
     }
@@ -88,7 +101,6 @@ public class ShopService {
         if (!product.getShop().getAfm().equals(loggedInShop.getAfm())) {
             throw new Exception("Unauthorized: You do not own this product.");
         }
-
         // 3. Delete
         productRepository.delete(product);
     }
