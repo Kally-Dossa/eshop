@@ -30,7 +30,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (productRepository.count() == 0) {
 
             System.out.println("--- ΑΡΧΙΚΟΠΟΙΗΣΗ ΔΕΔΟΜΕΝΩΝ ΒΑΣΗΣ ---");
 
@@ -169,6 +168,249 @@ public class DatabaseInitializer implements CommandLineRunner {
             p13.setShop(shop);
             productRepository.save(p13);
 
+            Product p14 = new Product();
+            p14.setBrand("Bose");
+            p14.setDescription("QuietComfort Ultra Earbuds");
+            p14.setPrice(299.00);
+            p14.setStock(18);
+            p14.setType("Audio");
+            p14.setShop(homeStore);
+            productRepository.save(p14);
+
+            Product p15 = new Product();
+            p15.setBrand("Microsoft");
+            p15.setDescription("Xbox Series X");
+            p15.setPrice(499.00);
+            p15.setStock(11);
+            p15.setType("Console");
+            p15.setShop(homeStore);
+            productRepository.save(p15);
+
+            Product p16 = new Product();
+            p16.setBrand("Canon");
+            p16.setDescription("EOS R6 Mark II");
+            p16.setPrice(2500.00);
+            p16.setStock(4);
+            p16.setType("Camera");
+            p16.setShop(homeStore);
+            productRepository.save(p16);
+
+            Product p17 = new Product();
+            p17.setBrand("Dyson");
+            p17.setDescription("V15 Detect Vacuum");
+            p17.setPrice(750.00);
+            p17.setStock(6);
+            p17.setType("Home Appliance");
+            p17.setShop(homeStore);
+            productRepository.save(p17);
+
+            Product p18 = new Product();
+            p18.setBrand("Philips");
+            p18.setDescription("Hue Smart Bulb Starter Kit");
+            p18.setPrice(120.00);
+            p18.setStock(30);
+            p18.setType("Smart Home");
+            p18.setShop(homeStore);
+            productRepository.save(p18);
+
+            Product p19 = new Product();
+            p19.setBrand("Lenovo");
+            p19.setDescription("ThinkPad X1 Carbon Gen 11");
+            p19.setPrice(1650.00);
+            p19.setStock(5);
+            p19.setType("Laptop");
+            p19.setShop(homeStore);
+            productRepository.save(p19);
+
+            Product p20 = new Product();
+            p20.setBrand("Google");
+            p20.setDescription("Pixel 8 Pro");
+            p20.setPrice(999.00);
+            p20.setStock(12);
+            p20.setType("Smartphone");
+            p20.setShop(homeStore);
+            productRepository.save(p20);
+
+            Product p21 = new Product();
+            p21.setBrand("LG");
+            p21.setDescription("C3 55 inch OLED TV");
+            p21.setPrice(1300.00);
+            p21.setStock(7);
+            p21.setType("TV");
+            p21.setShop(homeStore);
+            productRepository.save(p21);
+
+            Product p22 = new Product();
+            p22.setBrand("Corsair");
+            p22.setDescription("Vengeance 32GB DDR5 RAM");
+            p22.setPrice(150.00);
+            p22.setStock(22);
+            p22.setType("PC Component");
+            p22.setShop(homeStore);
+            productRepository.save(p22);
+
+            Product p23 = new Product();
+            p23.setBrand("Garmin");
+            p23.setDescription("Fenix 7 Solar");
+            p23.setPrice(600.00);
+            p23.setStock(9);
+            p23.setType("Wearable");
+            p23.setShop(homeStore);
+            productRepository.save(p23);
+
+            Product p24 = new Product();
+            p24.setBrand("GoPro");
+            p24.setDescription("HERO12 Black");
+            p24.setPrice(400.00);
+            p24.setStock(14);
+            p24.setType("Camera");
+            p24.setShop(homeStore);
+            productRepository.save(p24);
+
+            Product p25 = new Product();
+            p25.setBrand("SteelSeries");
+            p25.setDescription("Arctis Nova Pro Wireless");
+            p25.setPrice(350.00);
+            p25.setStock(10);
+            p25.setType("Accessory");
+            p25.setShop(homeStore);
+            productRepository.save(p25);
+
+            Product p26 = new Product();
+            p26.setBrand("Western Digital");
+            p26.setDescription("Black SN850X 2TB SSD");
+            p26.setPrice(180.00);
+            p26.setStock(25);
+            p26.setType("Storage");
+            p26.setShop(homeStore);
+            productRepository.save(p26);
+
+            Product p27 = new Product();
+            p27.setBrand("TP-Link");
+            p27.setDescription("Archer AX6000 Router");
+            p27.setPrice(280.00);
+            p27.setStock(13);
+            p27.setType("Networking");
+            p27.setShop(homeStore);
+            productRepository.save(p27);
+
+            Product p28 = new Product();
+            p28.setBrand("Nvidia");
+            p28.setDescription("GeForce RTX 4080 Super");
+            p28.setPrice(1100.00);
+            p28.setStock(2);
+            p28.setType("PC Component");
+            p28.setShop(homeStore);
+            productRepository.save(p28);
+
+            Product p29 = new Product();
+            p29.setBrand("Sonos");
+            p29.setDescription("Era 100 Smart Speaker");
+            p29.setPrice(270.00);
+            p29.setStock(9);
+            p29.setType("Audio");
+            p29.setShop(shop);
+            productRepository.save(p29);
+
+            Product p30 = new Product();
+            p30.setBrand("Ring");
+            p30.setDescription("Video Doorbell Pro 2");
+            p30.setPrice(230.00);
+            p30.setStock(15);
+            p30.setType("Smart Home");
+            p30.setShop(shop);
+            productRepository.save(p30);
+
+            Product p31 = new Product();
+            p31.setBrand("Keychron");
+            p31.setDescription("K2 Wireless Mechanical Keyboard");
+            p31.setPrice(110.00);
+            p31.setStock(20);
+            p31.setType("Accessory");
+            p31.setShop(shop);
+            productRepository.save(p31);
+
+            Product p32 = new Product();
+            p32.setBrand("Elgato");
+            p32.setDescription("Stream Deck MK.2");
+            p32.setPrice(150.00);
+            p32.setStock(12);
+            p32.setType("Accessory");
+            p32.setShop(shop);
+            productRepository.save(p32);
+
+            Product p33 = new Product();
+            p33.setBrand("Seagate");
+            p33.setDescription("Expansion 5TB External HDD");
+            p33.setPrice(135.00);
+            p33.setStock(18);
+            p33.setType("Storage");
+            p33.setShop(shop);
+            productRepository.save(p33);
+
+            Product p34 = new Product();
+            p34.setBrand("BenQ");
+            p34.setDescription("ScreenBar Halo Monitor Light");
+            p34.setPrice(175.00);
+            p34.setStock(10);
+            p34.setType("Accessory");
+            p34.setShop(homeStore);
+            productRepository.save(p34);
+
+            Product p35 = new Product();
+            p35.setBrand("Epson");
+            p35.setDescription("EcoTank ET-2810 Printer");
+            p35.setPrice(220.00);
+            p35.setStock(6);
+            p35.setType("Office");
+            p35.setShop(homeStore);
+            productRepository.save(p35);
+
+            Product p36 = new Product();
+            p36.setBrand("Wacom");
+            p36.setDescription("Intuos Pro Medium");
+            p36.setPrice(340.00);
+            p36.setStock(5);
+            p36.setType("Creative");
+            p36.setShop(homeStore);
+            productRepository.save(p36);
+
+            Product p37 = new Product();
+            p37.setBrand("Blue");
+            p37.setDescription("Yeti USB Microphone");
+            p37.setPrice(130.00);
+            p37.setStock(14);
+            p37.setType("Audio");
+            p37.setShop(homeStore);
+            productRepository.save(p37);
+
+            Product p38 = new Product();
+            p38.setBrand("HyperX");
+            p38.setDescription("Cloud II Gaming Headset");
+            p38.setPrice(95.00);
+            p38.setStock(30);
+            p38.setType("Audio");
+            p38.setShop(homeStore);
+            productRepository.save(p38);
+
+            Product p39 = new Product();
+            p39.setBrand("Eufy");
+            p39.setDescription("RoboVac L35 Hybrid");
+            p39.setPrice(399.00);
+            p39.setStock(7);
+            p39.setType("Home Appliance");
+            p39.setShop(homeStore);
+            productRepository.save(p39);
+
+            Product p40 = new Product();
+            p40.setBrand("Crucial");
+            p40.setDescription("X9 Pro 2TB Portable SSD");
+            p40.setPrice(160.00);
+            p40.setStock(22);
+            p40.setType("Storage");
+            p40.setShop(homeStore);
+            productRepository.save(p40);
+
             // 3. Δημιουργία Χρήστη (Citizen)
             Citizen user = new Citizen();
             user.setAfm("123456789");
@@ -203,6 +445,6 @@ public class DatabaseInitializer implements CommandLineRunner {
             //cartRepository.save(cart);
 
             System.out.println("--- Η ΒΑΣΗ ΓΕΜΙΣΕ ΕΠΙΤΥΧΩΣ ---");
-        }
+
     }
 }
