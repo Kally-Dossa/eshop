@@ -22,8 +22,6 @@ public class DatabaseInitializer implements CommandLineRunner {
     private ShopRepository shopRepository;
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private CartRepository cartRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -438,11 +436,6 @@ public class DatabaseInitializer implements CommandLineRunner {
             user3.setPassword(passwordEncoder.encode("nikos123"));
             user3.setRole("CITIZEN");
             citizenRepository.save(user3);
-
-            // 4. Δημιουργία Καλαθιού
-            //Cart cart = new Cart();
-            //cart.setCitizen(savedUser);
-            //cartRepository.save(cart);
 
             System.out.println("--- Η ΒΑΣΗ ΓΕΜΙΣΕ ΕΠΙΤΥΧΩΣ ---");
 

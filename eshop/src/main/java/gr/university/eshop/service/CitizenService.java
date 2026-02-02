@@ -1,9 +1,7 @@
 package gr.university.eshop.service;
 
 import gr.university.eshop.dto.CitizenRegisterDto;
-import gr.university.eshop.model.Cart;
 import gr.university.eshop.model.Citizen;
-import gr.university.eshop.repository.CartRepository;
 import gr.university.eshop.repository.CitizenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,6 @@ public class CitizenService {
 
     @Autowired
     private CitizenRepository citizenRepository;
-
-    @Autowired
-    private CartRepository cartRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;

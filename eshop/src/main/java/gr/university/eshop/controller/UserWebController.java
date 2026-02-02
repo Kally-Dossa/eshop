@@ -16,15 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.*;
 
 
 @Controller
 @RequestMapping("/user")
 public class UserWebController {
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private ProductService productService;
@@ -67,7 +64,7 @@ public class UserWebController {
             // 2. Δεδομένα Καλαθιού
             GetCartDetailsDto cartDetails = cartService.getCart(citizen);
             model.addAttribute("cart", cartDetails);
-            java.util.Map<Long, Integer> cartMap = new java.util.HashMap<>();
+            Map<Long, Integer> cartMap = new HashMap<>();
             if (cartDetails != null && cartDetails.getItems() != null) {
                 for (var item : cartDetails.getItems()) {
                     cartMap.put(item.getProduct().getId(), item.getQuantity());
