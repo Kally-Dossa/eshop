@@ -46,6 +46,9 @@
                             <td>
                                 <form th:action="@{/shop/products/update-stock}" method="post" class="d-flex align-items-center" onsubmit="return validateStock(this)">
                                     <input type="hidden" name="productId" th:value="${product.id}">
+
+                                    <input type="hidden" name="page" th:value="${currentPage}">
+
                                     <input type="number" name="newStock" th:value="${product.stock}" min="0" class="form-control form-control-sm text-center shadow-sm" style="width: 70px;">
                                     <button type="submit" class="btn btn-sm btn-success ms-2 px-2 shadow-sm">
                                         OK

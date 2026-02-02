@@ -1,17 +1,16 @@
 package gr.university.eshop.controller;
 import org.springframework.data.domain.Page;
-import gr.university.eshop.dto.LoginDto;
+
 import gr.university.eshop.dto.ProductDto;
-import gr.university.eshop.dto.ShopRegisterDto;
 import gr.university.eshop.model.Product;
 import gr.university.eshop.model.Shop;
 import gr.university.eshop.service.ShopService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,30 +22,8 @@ public class ShopWebController {
     @Autowired
     private ShopService shopService;
 
-    // LOGIN  ---
-    @PostMapping("shop/login")
-    public String login(@Valid @ModelAttribute("loginDto") LoginDto loginDto,
-                        BindingResult result,
-                        HttpSession session,
-                        Model model) {
 
-        if (result.hasErrors()) {
-            model.addAttribute("registerDto", new ShopRegisterDto());
-            return "index";
-        }
-
-        try {
-            Shop shop = shopService.login(loginDto.getEmail(), loginDto.getPassword());
-            session.setAttribute("loggedInShop", shop);
-            return "redirect:/shop/dashboard";
-        } catch (Exception e) {
-            model.addAttribute("loginError", "Λάθος Email ή Κωδικός");
-            model.addAttribute("registerDto", new ShopRegisterDto());
-            return "index";
-        }
-    }
-
-    // --- 4. DASHBOARD & ΛΟΙΠΕΣ ΛΕΙΤΟΥΡΓΙΕΣ ---
+    // --- DASHBOARD & ΛΟΙΠΕΣ ΛΕΙΤΟΥΡΓΙΕΣ ---
     @GetMapping("/shop/dashboard")
     public String showDashboard(HttpSession session,
                                 Model model,
@@ -110,6 +87,7 @@ public class ShopWebController {
     public String updateStock(@RequestParam Long productId,
                               @RequestParam Integer newStock,
                               HttpSession session,
+                              @RequestParam(defaultValue = "0") int page,
                               RedirectAttributes redirectAttributes) {
 
         Shop loggedInShop = (Shop) session.getAttribute("loggedInShop");
@@ -122,7 +100,7 @@ public class ShopWebController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        return "redirect:/shop/dashboard";
+        return "redirect:/shop/dashboard?page=" + page;
     }
 
     @GetMapping("/logout")

@@ -56,7 +56,7 @@ public class MainController {
     public String login(@Valid @ModelAttribute("loginDto") LoginDto loginDto,
                         BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) {
-            return "login"; // Επιστροφή στο login.html αν υπάρχουν κενά πεδία
+            return "login"; //
         }
 
         try {

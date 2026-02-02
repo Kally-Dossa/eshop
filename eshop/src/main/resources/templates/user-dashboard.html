@@ -43,7 +43,6 @@
                             <div class="card-body p-4">
                                 <h5 class="mb-4 text-dark fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="fas fa-filter me-2"></i>Φίλτρα</span>
-
                                     <span th:if="${(param.type != null and param.type[0] != '') or
                                                    (param.brand != null and param.brand[0] != '') or
                                                    (param.description != null and param.description[0] != '') or
@@ -90,7 +89,6 @@
                                       (param.maxPrice != null and param.maxPrice[0] != '')}"
                              class="mb-3 d-flex flex-wrap align-items-center gap-2">
                             <span class="small fw-bold text-muted me-2">Εφαρμοσμένα:</span>
-
                             <span th:if="${param.type != null and param.type[0] != ''}" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">Κατηγορία: [[${param.type}]]</span>
                             <span th:if="${param.brand != null and param.brand[0] != ''}" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">Μάρκα: [[${param.brand}]]</span>
                             <span th:if="${param.description != null and param.description[0] != ''}" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">Περιγραφή: [[${param.description}]]</span>
@@ -100,25 +98,59 @@
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                             <div class="col product-card" th:each="product : ${products}">
-                                <div class="card h-100 shadow-sm border-0 transition-hover">
+                                <div class="card h-100 shadow-sm border-0 transition-hover"
+                                     th:with="inCart=${cartMap != null ? cartMap.getOrDefault(product.id, 0) : 0},
+                                              canAdd=${product.stock > inCart}">
+
                                     <div class="card-body">
                                         <div class="badge bg-secondary mb-2" th:text="${product.type}">Category</div>
                                         <h5 class="card-title fw-bold" th:text="${product.brand}">Brand</h5>
                                         <p class="card-text text-muted small" th:text="${product.description}">Description</p>
+
+                                        <p class="card-text text-muted small" th:if="${product.shop != null}">
+                                            <i class="fas fa-store me-1"></i><span th:text="${product.shop.name}">Shop Name</span>
+                                        </p>
+
                                         <h4 class="text-primary fw-bold">[[${product.price}]] €</h4>
+
                                         <div class="mt-2">
-                                            <span th:if="${product.stock > 0}" class="badge rounded-pill bg-success-subtle text-success px-3">Διαθέσιμο</span>
-                                            <span th:unless="${product.stock > 0}" class="badge rounded-pill bg-danger-subtle text-danger px-3">Εξαντλήθηκε</span>
+                                            <span th:if="${product.stock == 0}" class="badge rounded-pill bg-danger-subtle text-danger px-3">Εξαντλήθηκε</span>
+
+                                            <span th:if="${product.stock > 0 and !canAdd}" class="badge rounded-pill bg-warning-subtle text-warning px-3 border border-warning">
+                                                Όλα στο καλάθι ([[${inCart}]])
+                                            </span>
+
+                                            <span th:if="${product.stock > 0 and canAdd}" class="badge rounded-pill bg-success-subtle text-success px-3">
+                                                Διαθέσιμο ([[${product.stock}]])
+                                            </span>
                                         </div>
                                     </div>
+
                                     <div class="card-footer bg-white border-0 pb-3">
                                         <form th:action="@{/user/cart/add}" method="post" class="d-flex gap-2">
                                             <input type="hidden" name="productId" th:value="${product.id}">
-                                            <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 70px;" th:disabled="${product.stock == 0}">
-                                            <button type="submit" class="btn btn-primary flex-fill" th:disabled="${product.stock == 0}">
+
+                                            <input type="hidden" name="page" th:value="${currentPage}">
+                                            <input type="hidden" name="type" th:value="${param.type}">
+                                            <input type="hidden" name="brand" th:value="${param.brand}">
+                                            <input type="hidden" name="description" th:value="${param.description}">
+                                            <input type="hidden" name="minPrice" th:value="${param.minPrice}">
+                                            <input type="hidden" name="maxPrice" th:value="${param.maxPrice}">
+
+                                            <input type="number" name="quantity" value="1" min="1"
+                                                   th:max="${product.stock - inCart}"
+                                                   class="form-control" style="width: 70px;"
+                                                   th:disabled="${!canAdd}">
+
+                                            <button type="submit" class="btn btn-primary flex-fill"
+                                                    th:disabled="${!canAdd}">
                                                 Προσθήκη
                                             </button>
                                         </form>
+
+                                        <small th:if="${product.stock > 0 and !canAdd}" class="text-danger d-block mt-1 text-center" style="font-size: 0.75rem;">
+                                            Έχετε δεσμεύσει όλο το απόθεμα.
+                                        </small>
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +186,7 @@
                                 <thead>
                                 <tr>
                                     <th>Προϊόν</th>
-                                    <th>Τιμή</th>
+                                    <th>Κατάστημα</th> <th>Τιμή</th>
                                     <th>Ποσότητα</th>
                                     <th>Σύνολο</th>
                                     <th>Ενέργεια</th>
@@ -166,6 +198,16 @@
                                         <div class="fw-bold" th:text="${item.product.brand}">Product</div>
                                         <small class="text-muted" th:text="${item.product.description}"></small>
                                     </td>
+
+                                    <td>
+                                        <span class="badge bg-light text-dark border"
+                                              th:if="${item.product.shop != null}"
+                                              th:text="${item.product.shop.name}">
+                                            Shop Name
+                                        </span>
+                                        <span th:if="${item.product.shop == null}" class="text-muted small">-</span>
+                                    </td>
+
                                     <td th:text="${item.product.price} + ' €'">0.00 €</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">

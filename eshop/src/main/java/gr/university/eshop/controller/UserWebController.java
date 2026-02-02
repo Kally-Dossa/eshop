@@ -67,6 +67,13 @@ public class UserWebController {
             // 2. Δεδομένα Καλαθιού
             GetCartDetailsDto cartDetails = cartService.getCart(citizen);
             model.addAttribute("cart", cartDetails);
+            java.util.Map<Long, Integer> cartMap = new java.util.HashMap<>();
+            if (cartDetails != null && cartDetails.getItems() != null) {
+                for (var item : cartDetails.getItems()) {
+                    cartMap.put(item.getProduct().getId(), item.getQuantity());
+                }
+            }
+            model.addAttribute("cartMap", cartMap);
 
             // 3. Ιστορικό Παραγγελιών
             List<OrderDto> orders = orderService.getCitizenOrders(citizen);
@@ -83,9 +90,15 @@ public class UserWebController {
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
+                            // ΝΕΕΣ ΠΑΡΑΜΕΤΡΟΙ ΓΙΑ ΔΙΑΤΗΡΗΣΗ ΣΕΛΙΔΑΣ & ΦΙΛΤΡΩΝ
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(required = false) String type,
+                            @RequestParam(required = false) String brand,
+                            @RequestParam(required = false) String description,
+                            @RequestParam(required = false) Double minPrice,
+                            @RequestParam(required = false) Double maxPrice,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
-
 
         Citizen citizen = (Citizen) session.getAttribute("loggedInUser");
         if (citizen == null) return "redirect:/login-page";
@@ -96,6 +109,15 @@ public class UserWebController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Σφάλμα: " + e.getMessage());
         }
+
+        // Προσθήκη των παραμέτρων στο URL της ανακατεύθυνσης
+        redirectAttributes.addAttribute("page", page);
+        if (type != null && !type.isBlank()) redirectAttributes.addAttribute("type", type);
+        if (brand != null && !brand.isBlank()) redirectAttributes.addAttribute("brand", brand);
+        if (description != null && !description.isBlank()) redirectAttributes.addAttribute("description", description);
+        if (minPrice != null) redirectAttributes.addAttribute("minPrice", minPrice);
+        if (maxPrice != null) redirectAttributes.addAttribute("maxPrice", maxPrice);
+
         return "redirect:/user/dashboard";
     }
 
@@ -128,34 +150,7 @@ public class UserWebController {
         return "redirect:/user/dashboard";
     }
 
-    // search with JpaSpecification
-    @GetMapping("/search")
-    public String searchProducts(
-        @RequestParam(required = false) String type,
-        @RequestParam(required = false) String brand,
-        @RequestParam(required = false) String description,
-        @RequestParam(required = false) Double minPrice,
-        @RequestParam(required = false) Double maxPrice,
-        @RequestParam(required = false) Integer size,
-        RedirectAttributes redirectAttributes
-    ) {
-        try {
-            redirectAttributes.addAttribute("type", type);
-            redirectAttributes.addAttribute("brand", brand);
-            redirectAttributes.addAttribute("description", description);
-            redirectAttributes.addAttribute("minPrice", minPrice);
-            redirectAttributes.addAttribute("maxPrice", maxPrice);
-
-            if (size != null) {
-                redirectAttributes.addAttribute("size", size);
-            }
-            
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Αποτυχία αναζήτησης: " + e.getMessage());
-        }
-        return "redirect:/user/dashboard";
-    }
 
 
-    
+
 }
