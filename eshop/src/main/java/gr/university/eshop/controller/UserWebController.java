@@ -4,7 +4,6 @@ import gr.university.eshop.dto.GetCartDetailsDto;
 import gr.university.eshop.dto.OrderDto;
 import gr.university.eshop.model.Citizen;
 import gr.university.eshop.model.Product;
-import gr.university.eshop.repository.ProductRepository;
 import gr.university.eshop.service.CartService;
 import gr.university.eshop.service.OrderService;
 import gr.university.eshop.service.ProductService;
