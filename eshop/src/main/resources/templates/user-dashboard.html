@@ -165,8 +165,8 @@
                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                                     <a class="page-link" th:href="@{/user/dashboard(page=${currentPage - 1}, type=${param.type}, brand=${param.brand}, description=${param.description}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">&laquo;</a>
                                 </li>
-                                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                                    <a class="page-link" th:text="${i + 1}" th:href="@{/user/dashboard(page=${i}, type=${param.type}, brand=${param.brand}, description=${param.description}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">1</a>
+                                <li class="page-item" th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, currentPage - 3), T(java.lang.Math).min(totalPages - 1, currentPage + 3))}" th:classappend="${currentPage == i} ? 'active'">
+                                    <a class="page-link" th:text="${i + 1}" th:href="@{/user/dashboard(page=${i}, type=${param.type}, brand=${param.brand}, description=${param.description}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}"></a>
                                 </li>
                                 <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                                     <a class="page-link" th:href="@{/user/dashboard(page=${currentPage + 1}, type=${param.type}, brand=${param.brand}, description=${param.description}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">&raquo;</a>
