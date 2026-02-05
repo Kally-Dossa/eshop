@@ -48,7 +48,35 @@ public class DatabaseInitializer implements CommandLineRunner {
             homeStore.setRole("SHOP");
             shopRepository.save(homeStore);
 
-            // 2. Δημιουργία Προϊόντων
+            // 2. Δημιουργία Χρήστη (Citizen)
+            Citizen user = new Citizen();
+            user.setAfm("123456789");
+            user.setName("Γιάννης");
+            user.setSurname("Παπαδόπουλος");
+            user.setEmail("user@test.gr");
+            user.setPassword(passwordEncoder.encode("1234"));
+            user.setRole("CITIZEN");
+            citizenRepository.save(user);
+
+            Citizen user2 = new Citizen();
+            user2.setAfm("987654321");
+            user2.setName("Μαρία");
+            user2.setSurname("Κωνσταντίνου");
+            user2.setEmail("maria@test.gr");
+            user2.setPassword(passwordEncoder.encode("maria1234567"));
+            user2.setRole("CITIZEN");
+            citizenRepository.save(user2);
+
+            Citizen user3 = new Citizen();
+            user3.setAfm("111222333");
+            user3.setName("Νίκος");
+            user3.setSurname("Γεωργίου");
+            user3.setEmail("nikos@test.gr");
+            user3.setPassword(passwordEncoder.encode("nikos123"));
+            user3.setRole("CITIZEN");
+            citizenRepository.save(user3);
+
+            // 3. Δημιουργία Προϊόντων
             Product p1 = new Product();
             p1.setBrand("Apple");
             p1.setDescription("iPhone 15 Pro");
@@ -408,34 +436,6 @@ public class DatabaseInitializer implements CommandLineRunner {
             p40.setType("Storage");
             p40.setShop(homeStore);
             productRepository.save(p40);
-
-            // 3. Δημιουργία Χρήστη (Citizen)
-            Citizen user = new Citizen();
-            user.setAfm("123456789");
-            user.setName("Γιάννης");
-            user.setSurname("Παπαδόπουλος");
-            user.setEmail("user@test.gr");
-            user.setPassword(passwordEncoder.encode("1234"));
-            user.setRole("CITIZEN");
-            Citizen savedUser = citizenRepository.save(user);
-
-            Citizen user2 = new Citizen();
-            user2.setAfm("987654321");
-            user2.setName("Μαρία");
-            user2.setSurname("Κωνσταντίνου");
-            user2.setEmail("maria@test.gr");
-            user2.setPassword(passwordEncoder.encode("maria1234567"));
-            user2.setRole("CITIZEN");
-            citizenRepository.save(user2);
-
-            Citizen user3 = new Citizen();
-            user3.setAfm("111222333");
-            user3.setName("Νίκος");
-            user3.setSurname("Γεωργίου");
-            user3.setEmail("nikos@test.gr");
-            user3.setPassword(passwordEncoder.encode("nikos123"));
-            user3.setRole("CITIZEN");
-            citizenRepository.save(user3);
 
             System.out.println("--- Η ΒΑΣΗ ΓΕΜΙΣΕ ΕΠΙΤΥΧΩΣ ---");
 
